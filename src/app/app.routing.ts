@@ -13,7 +13,6 @@ import {TestComponent} from './pages/test/test.component';
 
 // Purchase
 import {PurchaseComponent} from './main/purchase/purchase.component';
-
 // Inventory
 import {InventoryComponent} from './main/inventory/inventory.component';
 
@@ -43,16 +42,19 @@ const appRoutes: Routes = [
               {path: '', component: HomeComponent, pathMatch: 'full'},
               {
                 path: 'purchase',
-                component: PurchaseComponent, pathMatch: 'full'
-                /*,
+                component: PurchaseComponent,
                 children: [
                   {
                     path: '',
                     children: [
-                      // {path: 'comparison', loadChildren: '/main/purchase/comparison.module#ComparisonModule'},
+                      {path: '', component: HomeComponent, pathMatch: 'full'},
+                      {path: 'comparison', loadChildren: 'app/main/purchase/comparison/comparison.module#ComparisonModule'},
+                      {path: 'purchase-requisition', loadChildren: 'app/main/purchase/purchase-requisition/purchase-requisition.module#PurchaseRequisitionModule'},
+                      {path: 'purchase-order', loadChildren: 'app/main/purchase/purchase-order/purchase-order.module#PurchaseOrderModule'},
+                      {path: 'goods-receive', loadChildren: 'app/main/purchase/goods-receive/goods-receive.module#GoodsReceiveModule'},
                     ]
                   }
-                ]*/
+                ]
               },
               {
                 path: 'inventory',
@@ -62,12 +64,12 @@ const appRoutes: Routes = [
                   {
                     path: '',
                     children: [
-                      // {path: 'stock-adjustment', loadChildren: '/main/inventory/stock-adjustment.module#StockAdjustmentModule'},
+                      // {path: 'stock-adjustment', loadChildren: 'app/main/inventory/stock-adjustment.module#StockAdjustmentModule'},
                     ]
                   }
                 ]*/
               },
-              {path: 'summary', loadChildren: './main/summary/summary.module#SummaryModule'},
+              {path: 'summary', loadChildren: 'app/main/summary/summary.module#SummaryModule'},
             ]
           }
         ]
@@ -97,6 +99,6 @@ export const routedComponents: any[] = [
   MainComponent,
   HomeComponent,
   PurchaseComponent,
-  InventoryComponent
+  InventoryComponent,
   // AdminComponent
 ];
