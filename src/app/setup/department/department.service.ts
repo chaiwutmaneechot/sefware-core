@@ -10,7 +10,7 @@ export class DepartmentService {
 
   lists: FirebaseListObservable<any>;
   rows: Department [] = [];
-  _path: string = '/main/settings/Department';
+  _path: string = '/main/settings/department';
 
   constructor(private agFb: AngularFireDatabase) {
     this.lists = agFb.list(this._path, {preserveSnapshot: true});
