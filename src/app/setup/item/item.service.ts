@@ -57,6 +57,16 @@ export class ItemService {
     });
   }
 
+  requestDataByComparison(prefix: string) {
+    return this.agFb.list(this._path, {
+      query: {
+        orderByChild: 'code',
+        startAt: prefix + '',
+        endAt: prefix + '9'
+      }
+    });
+  }
+
   public getResults(page: Page): Observable<PagedData<Item>> {
     return Observable.of(this.rows).map((data) => this.getPagedData(page));
   }

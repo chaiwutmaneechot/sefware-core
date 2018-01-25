@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import {ComparisonRouting} from './comparison.routing';
-import {ComparisonComponent} from './comparison.component';
-
 import {CommonModule} from '@angular/common';
 import {LocaleService, TranslationModule, TranslationService} from 'angular-l10n';
 import {SharedModule} from '../../../shared/shared.module';
 import {GalleryConfig, GalleryModule} from 'ng-gallery';
 import {BarRatingModule} from 'ngx-bar-rating';
+
+import {ComparisonComponent} from './comparison.component';
+import { CompareByItemComponent } from './compare-by-item/compare-by-item.component';
 
 @NgModule({
   imports: [
@@ -43,10 +44,11 @@ import {BarRatingModule} from 'ngx-bar-rating';
     ),
   ],
   declarations: [
-    ComparisonComponent
+    ComparisonComponent,
+    CompareByItemComponent
   ],
   entryComponents: [
-
+    CompareByItemComponent
   ],
   providers: [
 

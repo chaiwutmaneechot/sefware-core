@@ -2,19 +2,23 @@ import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@a
 import {Language} from 'angular-l10n';
 import {ConfirmComponent} from '../../../dialog/confirm/confirm.component';
 import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import {Page} from '../../../shared/model/page';
 import {TdMediaService} from '@covalent/core';
 import {LogsService} from '../../../dialog/logs-dialog/logs.service';
 import {Logs} from '../../../dialog/logs-dialog/logs';
 import {LogsDialogComponent} from '../../../dialog/logs-dialog/logs-dialog.component';
-import { ComparisonService } from './comparison.service';
 import {Comparison} from './comparison';
+import {ComparisonService} from './comparison.service';
+import {CompareByItemComponent} from './compare-by-item/compare-by-item.component';
+import { Supplier } from '../../../setup/supplier/supplier';
+import { SupplierService } from '../../../setup/supplier/supplier.service';
 
 @Component({
   selector: 'app-purchase-comparison',
   templateUrl: './comparison.component.html',
   styleUrls: ['./comparison.component.scss'],
-  providers: [ComparisonService]
+  providers: [ComparisonService, SupplierService]
 })
 export class ComparisonComponent implements OnInit, AfterViewInit {
 
@@ -22,6 +26,7 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
   @ViewChild('dataTable') table: any;
 
   loading: boolean = true;
+  menu_expand: boolean = true;
 
   page = new Page();
   cache: any = {};
@@ -29,10 +34,17 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
 
   rows: any[] = [];
   temp = [];
+  suppliers = [];
+
+  compare_bys = [
+    {value: 'by_item', viewValue: 'By Item'},
+    {value: 'by_supplier', viewValue: 'By Supplier'}
+  ];
 
   constructor(private _comparisonService: ComparisonService,
               private _changeDetectorRef: ChangeDetectorRef,
               private _logService: LogsService,
+              private _supplierService: SupplierService,
               public media: TdMediaService,
               public snackBar: MatSnackBar,
               private dialog: MatDialog) {
@@ -68,6 +80,17 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
     });
   }
 
+  getSupplierData(code) {
+    this._supplierService.requestDataByCode(code).subscribe((snapshot) => {
+      this._supplierService.rows = [];
+      snapshot.forEach((s) => {
+
+        const _row = new Supplier(s.val());
+        this.suppliers.push(_row);
+      });
+    });
+  }
+
   setPage(pageInfo) {
 
     if (pageInfo) {
@@ -80,6 +103,10 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
       this.rows = pagedData.data;
     });
 
+  }
+
+  toggleMenu() {
+    this.menu_expand = !this.menu_expand;
   }
 
   addData() {
@@ -98,9 +125,27 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
     });*/
   }
 
-  editData(data: Comparison) {
-    /*const dialogRef = this.dialog.open(DialogComponent, {
+  addItemData() {
+    const dialogRef = this.dialog.open(CompareByItemComponent, {
       disableClose: true,
+      maxWidth: '100vw',
+      width: '100%',
+      height: '100%'
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+        this.addLog('Create', 'Create comparison by item succeed', result, {});
+        // this.msgs = [];
+        // this.msgs.push({severity: 'success', detail: 'Data updated'});
+      }
+    });
+  }
+
+  editData(data: Comparison) {
+    const dialogRef = this.dialog.open(CompareByItemComponent, {
+      disableClose: true,
+      maxWidth: '100vw',
       width: '100%',
       height: '100%',
       data
@@ -108,11 +153,11 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
-        this.addLog('Update', 'update driver succeed', result, data);
+        this.addLog('Update', 'Update comparison succeed', result, data);
         // this.msgs = [];
         // this.msgs.push({severity: 'success', detail: 'Data updated'});
       }
-    });*/
+    });
   }
 
   deleteData(data: Comparison) {
@@ -129,7 +174,7 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
         this.snackBar.dismiss();
         this._comparisonService.removeData(data).then(() => {
           this.snackBar.open('Delete comparison succeed', '', {duration: 3000});
-          this.addLog('Delete', 'delete comparison succeed', data, {});
+          this.addLog('Delete', 'Delete comparison succeed', data, {});
 
         }).catch((err) => {
           this.snackBar.open('Error : ' + err.message, '', {duration: 3000});
@@ -155,7 +200,7 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
 
           const new_data = new Comparison(data);
           new_data.disable = false;
-          this.addLog('Enable', 'enable comparison succeed', new_data, data);
+          this.addLog('Enable', 'Enable comparison succeed', new_data, data);
 
         }).catch((err) => {
           this.snackBar.open('Error : ' + err.message, '', {duration: 3000});
@@ -227,7 +272,11 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
     // filter our data
     const temp = this.temp.filter(function(d) {
       return (d.code.toLowerCase().indexOf(val) !== -1) ||
-        (d.name && d.name.toLowerCase().indexOf(val) !== -1)
+        (d.name && d.name.toLowerCase().indexOf(val) !== -1) ||
+        (d.supplier && d.supplier.toLowerCase().indexOf(val) !== -1) ||
+        (d.period_from && d.period_from.toLowerCase().indexOf(val) !== -1) ||
+        (d.period_to && d.period_to.toLowerCase().indexOf(val) !== -1) ||
+        (d.remark && d.remark.toLowerCase().indexOf(val) !== -1)
         || !val;
     });
 

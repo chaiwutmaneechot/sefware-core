@@ -2,18 +2,33 @@
   <mat-toolbar [ngClass]="{'editing':searchBox.searchVisible}">
     <div layout="row" layout-align="start center" flex>
 
-      <!--<button *ngIf="!searchBox.searchVisible" mat-icon-button [tdLayoutManageListToggle]="true" (click)="toggleMenu()">-->
-      <!--<mat-icon>{{menu_expand?'keyboard_arrow_left':'keyboard_arrow_right'}}</mat-icon>-->
-      <!--</button>-->
+      <button *ngIf="!searchBox.searchVisible" mat-icon-button [tdLayoutManageListToggle]="true" (click)="toggleMenu()">
+      <mat-icon>{{menu_expand?'keyboard_arrow_left':'keyboard_arrow_right'}}</mat-icon>
+      </button>
 
-      <span *ngIf="!searchBox.searchVisible">{{'Comparison' | translate:lang}}</span>
+      <span *ngIf="!searchBox.searchVisible" flex>{{'Comparison' | translate:lang}}</span>
+      <span *ngIf="!searchBox.searchVisible" flex></span>
+
+      <mat-form-field *ngIf="!searchBox.searchVisible" flex>
+        <mat-select placeholder="Compare By" class="push-bottom-none">
+          <mat-option *ngFor="let compare_by of compare_bys" [value]="compare_by.value">
+            {{ compare_by.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="!searchBox.searchVisible" flex>
+        <input matInput [matDatepicker]="period" placeholder="Piriod" class="push-bottom-none">
+        <mat-datepicker-toggle matSuffix [for]="period" style="font-size: 20px;"></mat-datepicker-toggle>
+        <mat-datepicker #period startView="year"></mat-datepicker>
+      </mat-form-field>
 
       <td-search-box #searchBox (keyup)='updateFilter($event)' (clear)="updateFilter('')" backIcon="arrow_back"
                      class="btn-icon" placeholder="Filter by any keyword" flex>
       </td-search-box>
 
       <span>
-      <a mat-icon-button mat-tooltip="History" class="btn-icon push-right-sm" (click)="openLogs(null)"><mat-icon>history</mat-icon></a>
+      <!--<a mat-icon-button mat-tooltip="History" class="btn-icon push-right-sm" (click)="openLogs(null)"><mat-icon>history</mat-icon></a>-->
         <!--<button mat-icon-button mat-tooltip="History"><mat-icon>history</mat-icon></button>-->
         <!--<button mat-icon-button mat-tooltip="More..." [matMenuTriggerFor]="toolbarMenu"><mat-icon>more_vert</mat-icon></button>-->
         <!--<mat-menu #toolbarMenu="matMenu">-->
@@ -22,9 +37,10 @@
         <!--<span>Export</span>-->
         <!--</button>-->
         <!--</mat-menu>-->
+      <a mat-raised-button tdMediaToggle="xs" [mediaStyles]="{display: 'none'}" class="btn-blue" (click)="addItemData()">
+        <mat-icon>add</mat-icon> By Item</a>
       <a mat-raised-button tdMediaToggle="xs" [mediaStyles]="{display: 'none'}" color="primary" (click)="addData()">
-        <mat-icon>add</mat-icon>
-        Add Comparison</a>
+        <mat-icon>add</mat-icon> By Project</a>
     </span>
 
     </div>
@@ -57,12 +73,12 @@
 
           <ngx-datatable-column
             prop="code"
-            name="Code"
+            name="Supplier Code"
             [minWidth]="50"
             [width]="75">
             <ng-template let-row="row" ngx-datatable-cell-template>
               <div style="text-align: left" class="text-truncate">
-                {{row.code}}
+                {{row.supplier}}
               </div>
             </ng-template>
           </ngx-datatable-column>
@@ -72,16 +88,16 @@
             [minWidth]="100"
             [canAutoResize]="true"
             prop="name"
-            name="Name">
+            name="Description">
             <ng-template let-row="row" ngx-datatable-cell-template>
               <div fxLayout="column">
-                <div [ngClass]="{'twoline-title': row.name_eng}" style="text-align: left;padding-bottom: 0px;"
+                <div [ngClass]="{'twoline-title': row.name}" style="text-align: left;padding-bottom: 0px;"
                      class="text-truncate">
                   {{row.name}}
                 </div>
-                <div *ngIf="row.name_eng" class="text-truncate"
+                <div *ngIf="row.name" class="text-truncate"
                      style="padding-top: 5px;text-align: left;line-height: 5px;font-size: 0.7rem;opacity: 0.8;">
-                  {{row.name_eng}}
+                  {{row.name}}
                 </div>
               </div>
             </ng-template>
@@ -90,11 +106,23 @@
           <ngx-datatable-column
             [width]="100"
             [minWidth]="50"
-            prop="detail"
-            name="Description">
+            prop="type"
+            name="Type">
             <ng-template let-row="row" ngx-datatable-cell-template>
               <div style="text-align: left" class="text-truncate">
-                {{row.detail}}
+                {{row.type}}
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column
+            [width]="100"
+            [minWidth]="50"
+            prop="period"
+            name="Period">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div style="text-align: left" class="text-truncate">
+                {{row.period}}
               </div>
             </ng-template>
           </ngx-datatable-column>
@@ -151,26 +179,47 @@
         <div class="mat-padding" *ngIf="rows?.length === 0 && !loading" layout="row" layout-align="center center">
           <h3>No data to display.</h3>
         </div>
-        <mat-paginator #paginator
-                      [length]="page.totalElements"
-                      [pageIndex]="page.pageNumber"
-                      [pageSize]="page.size"
-                      (page)="setPage($event)"
-                      [pageSizeOptions]="[25, 50, 100, 250]">
-        </mat-paginator>
+
+        <mat-divider></mat-divider>
+        <div layout="row" layout-align="start center">
+          <span>
+            <button mat-button class="text-upper" color="primary">
+            <mat-icon>sync</mat-icon> Process</button>
+          <button mat-button class="text-upper" color="accent">
+            <mat-icon>copyright</mat-icon> Button</button>
+          </span>
+          <mat-paginator #paginator
+                         [length]="page.totalElements"
+                         [pageIndex]="page.pageNumber"
+                         [pageSize]="page.size"
+                         (page)="setPage($event)"
+                         [pageSizeOptions]="[25, 50, 100, 250]" flex>
+          </mat-paginator>
+        </div>
+
       </mat-card>
     </div>
   </div>
 
 </div>
 
-
-<!--<a mat-fab color="primary" class="mat-fab-bottom-left fixed" [tdLayoutManageListToggle]="true" (click)="toggleMenu()">-->
-<!--<mat-icon>{{menu_expand?'keyboard_arrow_left':'keyboard_arrow_right'}}</mat-icon>-->
-<!--</a>-->
-
 <a mat-fab color="primary" tdMediaToggle="gt-xs" [mediaStyles]="{display: 'none'}" class="mat-fab-bottom-right fixed"
-   (click)="addData()">
+   [matMenuTriggerFor]="settingsMenu">
   <mat-icon>add</mat-icon>
 </a>
+<mat-menu #settingsMenu="matMenu" [overlapTrigger]="false">
+  <td-menu style="width: 150px;">
+    <mat-nav-list dense>
+      <!--<ng-template let-last="last" ngFor [ngForOf]="[0,1,2,3,4,5,6,7,8,9]">-->
+      <a mat-list-item>
+        <h4 mat-line><span class="text-wrap">By Item</span>
+        </h4>
+      </a>
+      <a mat-list-item>
+        <h4 mat-line><span class="text-wrap">By Project</span>
+        </h4>
+      </a>
+    </mat-nav-list>
+  </td-menu>
+</mat-menu>
 

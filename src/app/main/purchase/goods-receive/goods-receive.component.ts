@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GoodsReceiveComponent implements OnInit {
 
+  loading: boolean = true;
+  menu_expand: boolean = true;
+
   constructor() { }
 
   ngOnInit() {
   }
 
+  toggleMenu() {
+    this.menu_expand = !this.menu_expand;
+  }
 }
