@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Language } from 'angular-l10n';
 
 @Component({
   selector: 'app-purchase-goods-receive',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./goods-receive.component.scss']
 })
 export class GoodsReceiveComponent implements OnInit {
+
+  @Language() lang: string;
 
   loading: boolean = true;
   menu_expand: boolean = true;
@@ -18,4 +21,8 @@ export class GoodsReceiveComponent implements OnInit {
   toggleMenu() {
     this.menu_expand = !this.menu_expand;
   }
+
+  updateFilter() {}
+
+  openLogs() {}
 }

@@ -1,17 +1,18 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
 import {Language} from 'angular-l10n';
 import {TdLoadingService} from '@covalent/core';
 import * as _ from 'lodash';
 import { FormControl } from '@angular/forms';
 import { Page } from '../../../../shared/model/page';
 
-import { Comparison } from '../comparison';
+import { Comparison, ComparisonItem } from '../comparison';
 import { Supplier } from '../../../../setup/supplier/supplier';
 import { Item } from '../../../../setup/item/item';
 import { ItemType } from '../../../../setup/item-type/item-type';
 import { ItemGroup } from '../../../../setup/item-group/item-group';
 import { ItemSubGroup } from '../../../../setup/item-sub-group/item-sub-group';
+import { Uom } from '../../../../setup/uom/uom';
 
 import { ComparisonService } from '../comparison.service';
 import { SupplierService } from '../../../../setup/supplier/supplier.service';
@@ -19,17 +20,20 @@ import { ItemService } from '../../../../setup/item/item.service';
 import { ItemTypeService } from '../../../../setup/item-type/item-type.service';
 import { ItemSubGroupService } from '../../../../setup/item-sub-group/item-sub-group.service';
 import { ItemGroupService } from '../../../../setup/item-group/item-group.service';
+import { UomService } from '../../../../setup/uom/uom.service';
+import { ConfirmComponent } from '../../../../dialog/confirm/confirm.component';
 
 @Component({
   selector: 'app-compare-by-item',
   templateUrl: './compare-by-item.component.html',
   styleUrls: ['./compare-by-item.component.scss'],
-  providers: [ComparisonService, SupplierService, ItemService, ItemTypeService, ItemGroupService, ItemSubGroupService]
+  providers: [ComparisonService, SupplierService, ItemService, ItemTypeService, ItemGroupService, ItemSubGroupService, UomService]
 })
 export class CompareByItemComponent implements OnInit {
-
   data: Comparison = new Comparison({});
+  loading: boolean = true;
   error: any;
+
   images = [];
   rows: any[] = [];
   temp = [];
@@ -41,6 +45,8 @@ export class CompareByItemComponent implements OnInit {
   types = [];
   groups = [];
   subgroups = [];
+  uoms = [];
+  selected = [];
 
   storage_ref = '/main/settings/department';
 
@@ -51,7 +57,10 @@ export class CompareByItemComponent implements OnInit {
               private _itemtypeService: ItemTypeService,
               private _itemgroupService: ItemGroupService,
               private _itemsubgroupService: ItemSubGroupService,
+              private _uomService: UomService,
               private _loadingService: TdLoadingService,
+              public snackBar: MatSnackBar,
+              private dialog: MatDialog,
               public dialogRef: MatDialogRef<CompareByItemComponent>) {
     try {
       if (md_data) {
@@ -74,6 +83,7 @@ export class CompareByItemComponent implements OnInit {
   ngOnInit(): void {
     this.getSupplierData();
     this.getItemTypeData();
+    this.getUnitData();
   }
 
   setPage(pageInfo) {
@@ -101,7 +111,9 @@ export class CompareByItemComponent implements OnInit {
     // filter our data
     const temp = this.temp.filter(function(d) {
       return (d.code.toLowerCase().indexOf(val) !== -1) ||
-        (d.name && d.name.toLowerCase().indexOf(val) !== -1)
+        (d.name && d.name.toLowerCase().indexOf(val) !== -1) ||
+        (d.unit && d.unit.toLowerCase().indexOf(val) !== -1) ||
+        (d.price && d.price.toLowerCase().indexOf(val) !== -1)
         || !val;
     });
 
@@ -176,6 +188,29 @@ export class CompareByItemComponent implements OnInit {
      // }
   }
 
+  deleteItemData() {
+    /*this.dialog.open(ConfirmComponent, {
+      data: {
+        type: 'delete',
+        title: 'Delete comparison item',
+        content: 'Confirm to delete?',
+        data_title: 'Comparison Item'
+      }
+    }).afterClosed().subscribe((confirm: boolean) => {
+      if (confirm) {
+        this.snackBar.dismiss();
+        this._comparisonService.removeData(data).then(() => {
+          // this.snackBar.open('Delete comparison succeed', '', {duration: 3000});
+          // this.addLog('Delete', 'Delete comparison succeed', data, {});
+
+        }).catch((err) => {
+          this.snackBar.open('Error : ' + err.message, '', {duration: 3000});
+        });
+      }
+    });*/
+    console.log('Delete Data : ' + this.selected);
+  }
+
   getSupplierData() {
     this._supplierService.requestData().subscribe((snapshot) => {
       this._supplierService.rows = [];
@@ -223,9 +258,20 @@ export class CompareByItemComponent implements OnInit {
     });
   }
 
+  getUnitData() {
+    this._uomService.requestData().subscribe((snapshot) => {
+      this._uomService.rows = [];
+      snapshot.forEach((s) => {
+
+        const _row = new Uom(s.val());
+        this.uoms.push(_row);
+      });
+    });
+  }
+
   loadItemData(data) {
     this.error = false;
-      // this._loadingService.register();
+    this._loadingService.register();
     let item_code = '';
     this.data.item = [];
     if (data.type !== null) {
@@ -252,6 +298,7 @@ export class CompareByItemComponent implements OnInit {
         this.data.item.push(_row);
       });
     });
+    this._loadingService.resolve();
   }
 
   openLink(link: string) {

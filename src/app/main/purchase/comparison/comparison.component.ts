@@ -69,8 +69,9 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
       this._comparisonService.rows = [];
       snapshot.forEach((s) => {
 
-        const _row = new Comparison(s.val());
-        this._comparisonService.rows.push(_row);
+      const _row = new Comparison(s.val());
+
+      this._comparisonService.rows.push(_row);
 
       });
 
@@ -273,10 +274,9 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
     const temp = this.temp.filter(function(d) {
       return (d.code.toLowerCase().indexOf(val) !== -1) ||
         (d.name && d.name.toLowerCase().indexOf(val) !== -1) ||
-        (d.supplier && d.supplier.toLowerCase().indexOf(val) !== -1) ||
-        (d.period_from && d.period_from.toLowerCase().indexOf(val) !== -1) ||
-        (d.period_to && d.period_to.toLowerCase().indexOf(val) !== -1) ||
-        (d.remark && d.remark.toLowerCase().indexOf(val) !== -1)
+        (d.type && d.type.toLowerCase().indexOf(val) !== -1) ||
+        (d.period && d.period.toLowerCase().indexOf(val) !== -1) ||
+        (d.disable && d.disable.toLowerCase().indexOf(val) !== -1)
         || !val;
     });
 

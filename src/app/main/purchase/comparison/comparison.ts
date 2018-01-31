@@ -5,8 +5,8 @@ export class Comparison {
   type?: string = '';
   group?: string = '';
   subgroup?: string = '';
-  period_from?: string | null | undefined;
-  period_to?: string | null | undefined;
+  period_from?: number | null | undefined = new Date().getTime();
+  period_to?: number | null | undefined = new Date().getTime();
   remark?: string | null | undefined;
   disable?: boolean = false;
   item?: ComparisonItem[] = [];

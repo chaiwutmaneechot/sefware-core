@@ -30,21 +30,35 @@
     <mat-card-content class="push-bottom-none">
       <div layout="row" layout-align="start center" flex>
         <mat-form-field style="padding: 0px 10px;" flex>
-          <input matInput
-                 [matDatepicker]="period_from"
-                 placeholder="Piriod"
-                 [(ngModel)]="data.period_from">
-          <mat-datepicker-toggle matSuffix [for]="period_from" style="font-size: 20px;"></mat-datepicker-toggle>
-          <mat-datepicker #period_from></mat-datepicker>
+            <input matInput
+                   readonly
+                   name="period_from"
+                   [ngModel]="data.period_from | date:'dd MMMM yyyy'"
+                   (ngModelChange)="data.period_from = $event"
+                   placeholder="Period" flex>
+            <input matInput
+                   [max]="period_enddate_datepicker._selected"
+                   [matDatepicker]="period_startdate_datepicker"
+                   style="display: none;"
+                   (dateChange)="data.period_from = period_startdate_datepicker._selected.getTime()" flex>
+            <mat-datepicker-toggle matSuffix [for]="period_startdate_datepicker" style="font-size: 20px;"></mat-datepicker-toggle>
+          <mat-datepicker #period_startdate_datepicker></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field style="padding: 0px 10px;" flex>
-          <input matInput
-                 [matDatepicker]="period_to"
-                 placeholder="To"
-                 [(ngModel)]="data.period_to">
-          <mat-datepicker-toggle matSuffix [for]="period_to" style="font-size: 20px;"></mat-datepicker-toggle>
-          <mat-datepicker #period_to></mat-datepicker>
+            <input matInput
+                   readonly
+                   name="period_to"
+                   [ngModel]="data.period_to | date:'dd MMMM yyyy'"
+                   (ngModelChange)="data.period_to = $event"
+                   placeholder="To" flex>
+            <input matInput
+                   [min]="period_startdate_datepicker._selected"
+                   [matDatepicker]="period_enddate_datepicker"
+                   style="display: none;"
+                   (dateChange)="data.period_to = period_enddate_datepicker._selected.getTime()">
+            <mat-datepicker-toggle matSuffix [for]="period_enddate_datepicker" style="font-size: 20px;"></mat-datepicker-toggle>
+          <mat-datepicker #period_enddate_datepicker></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field style="padding: 0px 10px;" flex>
@@ -110,7 +124,7 @@
       <div layout="row" layout-align="start center" flex>
         <button mat-button class="text-upper" color="primary" (click)="loadItemData(data)">
           <mat-icon>get_app</mat-icon> Load Item</button>
-        <button mat-button class="text-upper" color="warn">
+        <button mat-button class="text-upper" color="warn" (click)="deleteItemData()">
           <mat-icon>delete_forever</mat-icon> Delete</button>
         <!--<span flex></span>-->
         <td-search-box #searchBox (keyup)='updateFilter($event)' (clear)="updateFilter('')" backIcon="arrow_back"
@@ -131,18 +145,21 @@
         [sorts]="[{prop: 'prop', dir: 'desc'}]"
         [limit]="page.size"
       >
-        <ngx-datatable-column [sortable]="false" width="20">
+        <ngx-datatable-column [sortable]="false"
+                              [minWidth]="50"
+                              [width]="75">
           <ng-template let-row="row" ngx-datatable-cell-template>
             <div style="text-align: left" class="text-truncate">
-              <mat-checkbox ><!--(click)="$event.stopPropagation()"
+              <mat-checkbox [ngModel]="!selected">
+                <!--(click)="$event.stopPropagation()"
                             (change)="$event ? selection.toggle(row) : null"
-                            [checked]="selection.isSelected(row)">-->
+                            [checked]="selection.isSelected(row)"> -->
               </mat-checkbox>
             </div>
           </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column [sortable]="false" name="No." width="50">
+        <ngx-datatable-column [sortable]="false" name="No." width="100">
           <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
             <div style="text-align: left" class="text-truncate">
               {{rowIndex+1}}.
@@ -153,8 +170,8 @@
         <ngx-datatable-column
           prop="code"
           name="Code"
-          [minWidth]="50"
-          [width]="75">
+          [minWidth]="75"
+          [width]="150">
           <ng-template let-row="row" ngx-datatable-cell-template>
             <div style="text-align: left" class="text-truncate">
               {{row.code}}
@@ -186,7 +203,6 @@
         <ngx-datatable-column
           [width]="150"
           [minWidth]="75"
-          [canAutoResize]="true"
           prop="unit"
           name="Unit">
           <ng-template let-row="row" ngx-datatable-cell-template>
@@ -197,8 +213,9 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column
-          [width]="100"
-          [minWidth]="50"
+          [width]="150"
+          [minWidth]="75"
+          [canAutoResize]="true"
           [resizeable]="false"
           prop="price"
           name="Price">
@@ -218,7 +235,7 @@
 
       </ngx-datatable>
 
-      <div class="mat-padding" *ngIf="items?.length === 0 && !loading" layout="row" layout-align="center center">
+      <div class="mat-padding" *ngIf="rows?.length === 0 && !cd " layout="row" layout-align="center center">
         <h3>No data to display.</h3>
       </div>
 

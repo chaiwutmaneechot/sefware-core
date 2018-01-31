@@ -18,9 +18,13 @@
       </mat-form-field>
 
       <mat-form-field *ngIf="!searchBox.searchVisible" flex>
-        <input matInput [matDatepicker]="period" placeholder="Piriod" class="push-bottom-none">
+        <input matInput
+               [matDatepicker]="period"
+               placeholder="Piriod"
+               class="push-bottom-none" >
+        <!--[value]="period | date:'MMMM yyyy'">-->
         <mat-datepicker-toggle matSuffix [for]="period" style="font-size: 20px;"></mat-datepicker-toggle>
-        <mat-datepicker #period startView="year"></mat-datepicker>
+        <mat-datepicker #period startView="year" dataformatas="MMM yyyy"></mat-datepicker>
       </mat-form-field>
 
       <td-search-box #searchBox (keyup)='updateFilter($event)' (clear)="updateFilter('')" backIcon="arrow_back"
@@ -121,8 +125,15 @@
             prop="period"
             name="Period">
             <ng-template let-row="row" ngx-datatable-cell-template>
-              <div style="text-align: left" class="text-truncate">
-                {{row.period}}
+              <div fxLayout="column">
+                <div [ngClass]="{'twoline-title': row.period_from}" style="text-align: left;padding-bottom: 0px;"
+                     class="text-truncate">
+                  {{row.period_from | date:'dd MMMM yyyy'}}
+                </div>
+                <div *ngIf="row.period_from" class="text-truncate"
+                     style="padding-top: 5px;text-align: left;line-height: 5px;font-size: 0.7rem;opacity: 0.8;">
+                  To : {{row.period_to | date:'dd MMMM yyyy'}}
+                </div>
               </div>
             </ng-template>
           </ngx-datatable-column>
@@ -186,7 +197,7 @@
             <button mat-button class="text-upper" color="primary">
             <mat-icon>sync</mat-icon> Process</button>
           <button mat-button class="text-upper" color="accent">
-            <mat-icon>copyright</mat-icon> Button</button>
+            <mat-icon>monetization_on</mat-icon> Change Price</button>
           </span>
           <mat-paginator #paginator
                          [length]="page.totalElements"
