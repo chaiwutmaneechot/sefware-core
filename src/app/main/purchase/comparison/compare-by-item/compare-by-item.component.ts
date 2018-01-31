@@ -295,6 +295,11 @@ export class CompareByItemComponent implements OnInit {
       snapshot.forEach((s) => {
         console.log('Itemss Data :' + JSON.stringify(s));
         const _row = new Item(s);
+        this.uoms.forEach((uom) => {
+          if (_row.primary_unit === uom.code) {
+            _row.primary_unit_name = uom.name1;
+          }
+        });
         this.data.item.push(_row);
       });
     });

@@ -13,12 +13,15 @@ import {ComparisonService} from './comparison.service';
 import {CompareByItemComponent} from './compare-by-item/compare-by-item.component';
 import { Supplier } from '../../../setup/supplier/supplier';
 import { SupplierService } from '../../../setup/supplier/supplier.service';
+import { ItemType } from '../../../setup/item-type/item-type';
+import { ItemTypeService } from '../../../setup/item-type/item-type.service';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-purchase-comparison',
   templateUrl: './comparison.component.html',
   styleUrls: ['./comparison.component.scss'],
-  providers: [ComparisonService, SupplierService]
+  providers: [ComparisonService, SupplierService, ItemTypeService]
 })
 export class ComparisonComponent implements OnInit, AfterViewInit {
 
@@ -35,6 +38,7 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
   rows: any[] = [];
   temp = [];
   suppliers = [];
+  types = [];
 
   compare_bys = [
     {value: 'by_item', viewValue: 'By Item'},
@@ -45,6 +49,7 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
               private _changeDetectorRef: ChangeDetectorRef,
               private _logService: LogsService,
               private _supplierService: SupplierService,
+              private _itemTypeService: ItemTypeService,
               public media: TdMediaService,
               public snackBar: MatSnackBar,
               private dialog: MatDialog) {
@@ -55,6 +60,8 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.getSupplierData();
+    this.getItemTypeData();
     this.load();
   }
 
@@ -70,6 +77,18 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
       snapshot.forEach((s) => {
 
       const _row = new Comparison(s.val());
+      this.suppliers.forEach((sup) => {
+        if (_row.supplier === sup.code) {
+          _row.supplier_name1 = sup.name1;
+          _row.supplier_name2 = sup.name2;
+        }
+      });
+
+      this.types.forEach((typ) => {
+        if (_row.type === typ.code) {
+          _row.type_name = typ.name1;
+        }
+      });
 
       this._comparisonService.rows.push(_row);
 
@@ -81,13 +100,24 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getSupplierData(code) {
-    this._supplierService.requestDataByCode(code).subscribe((snapshot) => {
+  getSupplierData() {
+    this._supplierService.requestData().subscribe((snapshot) => {
       this._supplierService.rows = [];
       snapshot.forEach((s) => {
 
         const _row = new Supplier(s.val());
         this.suppliers.push(_row);
+      });
+    });
+  }
+
+  getItemTypeData() {
+    this._itemTypeService.requestData().subscribe((snapshot) => {
+      this._itemTypeService.rows = [];
+      snapshot.forEach((s) => {
+
+        const _row = new Supplier(s.val());
+        this.types.push(_row);
       });
     });
   }

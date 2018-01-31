@@ -33,7 +33,7 @@
             <input matInput
                    readonly
                    name="period_from"
-                   [ngModel]="data.period_from | date:'dd MMMM yyyy'"
+                   [ngModel]="data.period_from | date:'dd/MM/yyyy'"
                    (ngModelChange)="data.period_from = $event"
                    placeholder="Period" flex>
             <input matInput
@@ -49,7 +49,7 @@
             <input matInput
                    readonly
                    name="period_to"
-                   [ngModel]="data.period_to | date:'dd MMMM yyyy'"
+                   [ngModel]="data.period_to | date:'dd/MM/yyyy'"
                    (ngModelChange)="data.period_to = $event"
                    placeholder="To" flex>
             <input matInput

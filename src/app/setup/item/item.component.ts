@@ -31,6 +31,7 @@ export class ItemComponent implements OnInit {
 
   rows: any[] = [];
   temp = [];
+  uoms = [];
 
   constructor(private _itemService: ItemService,
               private _logService: LogsService,
@@ -53,6 +54,11 @@ export class ItemComponent implements OnInit {
       snapshot.forEach((s) => {
 
         const _row = new Item(s.val());
+        this.uoms.forEach((uom) => {
+          if (_row.primary_unit === uom.code) {
+            _row.primary_unit_name = uom.name1;
+          }
+        });
         this._itemService.rows.push(_row);
       });
 

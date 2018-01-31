@@ -2,7 +2,10 @@ export class Comparison {
   code?: string = 'N/A';
   name?: string | null | undefined;
   supplier?: string | null | undefined;
+  supplier_name1?: string | null | undefined;
+  supplier_name2?: string | null | undefined;
   type?: string = '';
+  type_name?: string = '';
   group?: string = '';
   subgroup?: string = '';
   period_from?: number | null | undefined = new Date().getTime();
