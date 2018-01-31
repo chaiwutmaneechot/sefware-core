@@ -13,5 +13,5 @@ export const environment = {
     storageBucket: 'sefware-cores.appspot.com',
     messagingSenderId: '242005092591'
   },
-  // api: 'https://us-central1-sefware-pos.cloudfunctions.net'
+  api: 'https://us-central1-sefware-cores.cloudfunctions.net'
 };

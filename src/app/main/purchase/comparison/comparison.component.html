@@ -19,12 +19,22 @@
 
       <mat-form-field *ngIf="!searchBox.searchVisible" flex>
         <input matInput
-               [matDatepicker]="period"
+               [matDatepicker]="period_from"
                placeholder="Piriod"
                class="push-bottom-none" >
         <!--[value]="period | date:'MMMM yyyy'">-->
-        <mat-datepicker-toggle matSuffix [for]="period" style="font-size: 20px;"></mat-datepicker-toggle>
-        <mat-datepicker #period startView="year" dataformatas="MMM yyyy"></mat-datepicker>
+        <mat-datepicker-toggle matSuffix [for]="period_from" style="font-size: 20px;"></mat-datepicker-toggle>
+        <mat-datepicker #period_from dataformatas="MMM yyyy"></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="!searchBox.searchVisible" flex>
+        <input matInput
+               [matDatepicker]="period_to"
+               placeholder="To"
+               class="push-bottom-none" >
+        <!--[value]="period | date:'MMMM yyyy'">-->
+        <mat-datepicker-toggle matSuffix [for]="period_to" style="font-size: 20px;"></mat-datepicker-toggle>
+        <mat-datepicker #period_to dataformatas="MMM yyyy"></mat-datepicker>
       </mat-form-field>
 
       <td-search-box #searchBox (keyup)='updateFilter($event)' (clear)="updateFilter('')" backIcon="arrow_back"
@@ -43,8 +53,8 @@
         <!--</mat-menu>-->
       <a mat-raised-button tdMediaToggle="xs" [mediaStyles]="{display: 'none'}" class="btn-blue" (click)="addItemData()">
         <mat-icon>add</mat-icon> By Item</a>
-      <a mat-raised-button tdMediaToggle="xs" [mediaStyles]="{display: 'none'}" color="primary" (click)="addData()">
-        <mat-icon>add</mat-icon> By Project</a>
+      <!--<a mat-raised-button tdMediaToggle="xs" [mediaStyles]="{display: 'none'}" color="primary" (click)="addData()">
+        <mat-icon>add</mat-icon> By Project</a>-->
     </span>
 
     </div>
