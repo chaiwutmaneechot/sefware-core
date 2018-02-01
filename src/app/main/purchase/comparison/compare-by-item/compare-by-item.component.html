@@ -124,8 +124,8 @@
       <div layout="row" layout-align="start center" flex>
         <button mat-button class="text-upper" color="primary" (click)="loadItemData(data)">
           <mat-icon>get_app</mat-icon> Load Item</button>
-        <button mat-button class="text-upper" color="warn" (click)="deleteItemData()">
-          <mat-icon>delete_forever</mat-icon> Delete</button>
+        <!--<button mat-button class="text-upper" color="warn" (click)="deleteItemData()">
+          <mat-icon>delete_forever</mat-icon> Delete</button>-->
         <!--<span flex></span>-->
         <td-search-box #searchBox (keyup)='updateFilter($event)' (clear)="updateFilter('')" backIcon="arrow_back"
                        class="btn-icon" placeholder="Filter by any keyword" [alwaysVisible]="true" flex>
@@ -145,19 +145,6 @@
         [sorts]="[{prop: 'prop', dir: 'desc'}]"
         [limit]="page.size"
       >
-        <ngx-datatable-column [sortable]="false"
-                              [minWidth]="50"
-                              [width]="75">
-          <ng-template let-row="row" ngx-datatable-cell-template>
-            <div style="text-align: left" class="text-truncate">
-              <mat-checkbox [ngModel]="!selected">
-                <!--(click)="$event.stopPropagation()"
-                            (change)="$event ? selection.toggle(row) : null"
-                            [checked]="selection.isSelected(row)"> -->
-              </mat-checkbox>
-            </div>
-          </ng-template>
-        </ngx-datatable-column>
 
         <ngx-datatable-column [sortable]="false" name="No." width="100">
           <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
@@ -233,9 +220,21 @@
           </ng-template>
         </ngx-datatable-column>
 
+        <ngx-datatable-column
+          [canAutoResize]="false"
+          [resizeable]="false"
+          [width]="90">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div style="text-align: center;" fxLayout="row">
+              <button mat-icon-button mat-tooltip="Delete" color="warn" class="" (click)="deleteItemData(row)">
+                <mat-icon>delete_forever</mat-icon>
+              </button>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
       </ngx-datatable>
 
-      <div class="mat-padding" *ngIf="rows?.length === 0 && !loading" layout="row" layout-align="center center">
+      <div class="mat-padding" *ngIf="data.item?.length === 0 && !loading" layout="row" layout-align="center center">
         <h3>No data to display.</h3>
       </div>
 

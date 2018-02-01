@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {AngularFireDatabase, FirebaseListObservable} from 'angularfire2/database-deprecated';
-import {Comparison} from './comparison';
+import { Comparison, ComparisonItem } from './comparison';
 import {Page} from '../../../shared/model/page';
 import {Observable} from 'rxjs';
 import {PagedData} from '../../../shared/model/paged-data';
@@ -8,8 +8,10 @@ import {PagedData} from '../../../shared/model/paged-data';
 @Injectable()
 export class ComparisonService {
   lists: FirebaseListObservable<any>;
+  item_lists: FirebaseListObservable<any>;
   rows: Comparison [] = [];
   _path: string = '/main/purchase/comparison';
+  item_path: string = '/main/purchase/comparison/item';
 
   constructor(private agFb: AngularFireDatabase) {
     this.lists = agFb.list(this._path, {preserveSnapshot: true});
@@ -21,10 +23,6 @@ export class ComparisonService {
 
   requestData() {
     return this.lists;
-  }
-
-  requestDataByCode(code: string) {
-    return this.agFb.object(this._path + '/' + code);
   }
 
   addData(data: Comparison) {

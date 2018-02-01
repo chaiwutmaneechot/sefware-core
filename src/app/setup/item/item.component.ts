@@ -12,12 +12,14 @@ import {Logs} from '../../dialog/logs-dialog/logs';
 import {LogsDialogComponent} from '../../dialog/logs-dialog/logs-dialog.component';
 import { ItemDialogComponent } from '../item/item-dialog/item-dialog.component';
 import { ImportItemDialogComponent } from '../item/import-item-dialog/import-item-dialog.component';
+import { Uom } from '../uom/uom';
+import { UomService } from '../uom/uom.service';
 
 @Component({
   selector: 'app-settings-item',
   templateUrl: './item.component.html',
   styleUrls: ['./item.component.scss'],
-  providers: [ItemService, LogsService]
+  providers: [ItemService, LogsService, UomService]
 })
 export class ItemComponent implements OnInit {
   @Language() lang: string;
@@ -34,6 +36,7 @@ export class ItemComponent implements OnInit {
   uoms = [];
 
   constructor(private _itemService: ItemService,
+              private _uomService: UomService,
               private _logService: LogsService,
               public media: TdMediaService,
               public snackBar: MatSnackBar,
@@ -44,6 +47,7 @@ export class ItemComponent implements OnInit {
 
   }
   ngOnInit(): void {
+    this.getUnitData();
     this.load();
   }
 
@@ -253,6 +257,17 @@ export class ItemComponent implements OnInit {
         // this.msgs = [];
         // this.msgs.push({severity: 'success', detail: 'Data updated'});
       }
+    });
+  }
+
+  getUnitData() {
+    this._uomService.requestData().subscribe((snapshot) => {
+      this._uomService.rows = [];
+      snapshot.forEach((s) => {
+
+        const _row = new Uom(s.val());
+        this.uoms.push(_row);
+      });
     });
   }
 

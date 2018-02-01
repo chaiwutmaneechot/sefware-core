@@ -22,6 +22,8 @@ import { ItemSubGroupService } from '../../../../setup/item-sub-group/item-sub-g
 import { ItemGroupService } from '../../../../setup/item-group/item-group.service';
 import { UomService } from '../../../../setup/uom/uom.service';
 import { ConfirmComponent } from '../../../../dialog/confirm/confirm.component';
+import { isBoolean } from 'util';
+import { passBoolean } from 'protractor/built/util';
 
 @Component({
   selector: 'app-compare-by-item',
@@ -46,7 +48,6 @@ export class CompareByItemComponent implements OnInit {
   groups = [];
   subgroups = [];
   uoms = [];
-  selected = [];
 
   storage_ref = '/main/settings/department';
 
@@ -185,30 +186,11 @@ export class CompareByItemComponent implements OnInit {
           this._loadingService.resolve();
         });
       }
-     // }
+    // }
   }
 
-  deleteItemData() {
-    /*this.dialog.open(ConfirmComponent, {
-      data: {
-        type: 'delete',
-        title: 'Delete comparison item',
-        content: 'Confirm to delete?',
-        data_title: 'Comparison Item'
-      }
-    }).afterClosed().subscribe((confirm: boolean) => {
-      if (confirm) {
-        this.snackBar.dismiss();
-        this._comparisonService.removeData(data).then(() => {
-          // this.snackBar.open('Delete comparison succeed', '', {duration: 3000});
-          // this.addLog('Delete', 'Delete comparison succeed', data, {});
-
-        }).catch((err) => {
-          this.snackBar.open('Error : ' + err.message, '', {duration: 3000});
-        });
-      }
-    });*/
-    console.log('Delete Data : ' + this.selected);
+  deleteItemData(row) {
+    this.data.item = this.data.item.filter((item) => item !== row);
   }
 
   getSupplierData() {
@@ -294,7 +276,7 @@ export class CompareByItemComponent implements OnInit {
       this._itemService.rows = [];
       snapshot.forEach((s) => {
         console.log('Itemss Data :' + JSON.stringify(s));
-        const _row = new Item(s);
+        const _row = new ComparisonItem(s);
         this.uoms.forEach((uom) => {
           if (_row.primary_unit === uom.code) {
             _row.primary_unit_name = uom.name1;
