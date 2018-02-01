@@ -135,7 +135,7 @@ export class CompareByItemComponent implements OnInit {
     const prefix = 'C' + _year + _month;
 
     this.data.code = prefix + '-001';
-    this._comparisonService.requestLastData().subscribe((s) => {
+    this._comparisonService.requestLastData(prefix).subscribe((s) => {
       s.forEach((ss: Comparison) => {
         console.log('Prev Code :' + ss.code);
         // tslint:disable-next-line:radix
