@@ -9,7 +9,7 @@ import {PerfectScrollbarConfigInterface, PerfectScrollbarModule} from 'ngx-perfe
 
 import {LocaleService, TranslationModule, TranslationService} from 'angular-l10n';
 import {CovalentHttpModule} from '@covalent/http';
-import { GalleryConfig, GalleryModule } from 'ng-gallery';
+import { GalleryModule } from 'ng-gallery';
 import {SharedModule} from './shared/shared.module';
 
 import {LazyLoadImageModule} from 'ng-lazyload-image';
