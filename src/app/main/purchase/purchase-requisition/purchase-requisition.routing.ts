@@ -5,7 +5,7 @@ import {PurchaseRequisitionComponent} from './purchase-requisition.component';
 const COMPARISON_ROUTER: Routes = [
   {
     path: '',
-    component: PurchaseRequisitionComponent
+    component: PurchaseRequisitionComponent, pathMatch: 'full'
   }
 ];
 

@@ -5,7 +5,7 @@ import {ComparisonComponent} from './comparison.component';
 const COMPARISON_ROUTER: Routes = [
   {
     path: '',
-    component: ComparisonComponent
+    component: ComparisonComponent, pathMatch: 'full'
   }
 ];
 

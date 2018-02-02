@@ -5,7 +5,7 @@ import {PurchaseOrderComponent} from './purchase-order.component';
 const COMPARISON_ROUTER: Routes = [
   {
     path: '',
-    component: PurchaseOrderComponent
+    component: PurchaseOrderComponent, pathMatch: 'full'
   }
 ];
 

@@ -8,10 +8,8 @@ import {PagedData} from '../../../shared/model/paged-data';
 @Injectable()
 export class ComparisonService {
   lists: FirebaseListObservable<any>;
-  item_lists: FirebaseListObservable<any>;
   rows: Comparison [] = [];
   _path: string = '/main/purchase/comparison';
-  item_path: string = '/main/purchase/comparison/item';
 
   constructor(private agFb: AngularFireDatabase) {
     this.lists = agFb.list(this._path, {preserveSnapshot: true});

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SettingsComponent } from './item-type-dialog.component';
+import { ItemTypeDialogComponent } from './item-type-dialog.component';
 
-describe('SettingsComponent', () => {
-  let component: SettingsComponent;
-  let fixture: ComponentFixture<SettingsComponent>;
+describe('ItemTypeDialogComponent', () => {
+  let component: ItemTypeDialogComponent;
+  let fixture: ComponentFixture<ItemTypeDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SettingsComponent ]
+      declarations: [ ItemTypeDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SettingsComponent);
+    fixture = TestBed.createComponent(ItemTypeDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
