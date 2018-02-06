@@ -141,22 +141,6 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
   }
 
   addData() {
-    /*const dialogRef = this.dialog.open(DialogComponent, {
-      disableClose: true,
-      width: '100%',
-      height: '100%'
-    });
-
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {
-        this.addLog('Create', 'create driver succeed', result, {});
-        // this.msgs = [];
-        // this.msgs.push({severity: 'success', detail: 'Data updated'});
-      }
-    });*/
-  }
-
-  addItemData() {
     const dialogRef = this.dialog.open(CompareByItemComponent, {
       disableClose: true,
       maxWidth: '100vw',
@@ -303,10 +287,10 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
     // filter our data
     const temp = this.temp.filter(function(d) {
       return (d.code.toLowerCase().indexOf(val) !== -1) ||
-        (d.name && d.name.toLowerCase().indexOf(val) !== -1) ||
-        (d.type && d.type.toLowerCase().indexOf(val) !== -1) ||
-        (d.period && d.period.toLowerCase().indexOf(val) !== -1) ||
-        (d.disable && d.disable.toLowerCase().indexOf(val) !== -1)
+        (d.supplier && d.supplier.toLowerCase().indexOf(val) !== -1) ||
+        (d.supplier_name1 && d.supplier_name1.toLowerCase().indexOf(val) !== -1) ||
+        (d.supplier_name2 && d.supplier_name2.toLowerCase().indexOf(val) !== -1) ||
+        (d.type_name && d.type_name.toLowerCase().indexOf(val) !== -1)
         || !val;
     });
 
