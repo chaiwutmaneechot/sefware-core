@@ -82,6 +82,7 @@ export class DepartmentDialogComponent implements OnInit {
       if (this.md_data) {
         if (_.isEqual(this.data, this.md_data)) {
           this.dialogRef.close(false);
+          this._loadingService.resolve();
         } else {
           this._departmentService.updateData(this.data).then(() => {
             this.dialogRef.close(this.data);
