@@ -26,8 +26,11 @@ export class ComparisonItem {
   subgroup_code?: string | null | undefined;
   name1?: string | null | undefined;
   name2?: string | null | undefined;
+  unit?: string | null | undefined;
   primary_unit?: string | null | undefined;
   primary_unit_name?: string | null | undefined;
+  secondary_unit?: string | null | undefined;
+  secondary_unit_name?: string | null | undefined;
   disable?: boolean = false;
   price?: number = 0;
 

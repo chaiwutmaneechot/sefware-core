@@ -190,12 +190,18 @@
         <ngx-datatable-column
           [width]="150"
           [minWidth]="75"
+          [canAutoResize]="true"
           prop="unit"
           name="Unit">
           <ng-template let-row="row" ngx-datatable-cell-template>
-            <div style="text-align: left" class="text-truncate">
-              {{row.primary_unit_name}}
-            </div>
+            <mat-form-field style="max-width: 75%;">
+              <mat-select #unitControl="ngModel"
+                          [ngModelOptions]="{standalone: true}"
+                          [(ngModel)]="row.unit">
+                <mat-option [value]="row.primary_unit" *ngIf="row.primary_unit">{{row.primary_unit}} : {{row.primary_unit_name}}</mat-option>
+                <mat-option [value]="row.secondary_unit" *ngIf="row.secondary_unit">{{row.secondary_unit}} : {{row.secondary_unit_name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
           </ng-template>
         </ngx-datatable-column>
 
@@ -203,7 +209,6 @@
           [width]="150"
           [minWidth]="75"
           [canAutoResize]="true"
-          [resizeable]="false"
           prop="price"
           name="Price">
           <ng-template let-row="row" ngx-datatable-cell-template>
@@ -234,7 +239,7 @@
         </ngx-datatable-column>
       </ngx-datatable>
 
-      <div class="mat-padding" *ngIf="data.item?.length === 0 && !loading" layout="row" layout-align="center center">
+      <div class="mat-padding" *ngIf="data.item?.length === 0" layout="row" layout-align="center center">
         <h3>No data to display.</h3>
       </div>
 

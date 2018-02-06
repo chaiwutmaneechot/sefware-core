@@ -281,6 +281,9 @@ export class CompareByItemComponent implements OnInit {
           if (_row.primary_unit === uom.code) {
             _row.primary_unit_name = uom.name1;
           }
+          if (_row.secondary_unit === uom.code) {
+            _row.secondary_unit_name = uom.name1;
+          }
         });
         this.data.item.push(_row);
       });
