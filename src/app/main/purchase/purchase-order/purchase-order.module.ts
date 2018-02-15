@@ -7,6 +7,7 @@ import {LocaleService, TranslationModule, TranslationService} from 'angular-l10n
 import {SharedModule} from '../../../shared/shared.module';
 import {GalleryConfig, GalleryModule} from 'ng-gallery';
 import {BarRatingModule} from 'ngx-bar-rating';
+import { PurchaseOrderDialogComponent } from './purchase-order-dialog/purchase-order-dialog.component';
 
 @NgModule({
   imports: [
@@ -43,10 +44,12 @@ import {BarRatingModule} from 'ngx-bar-rating';
     ),
   ],
   declarations: [
-    PurchaseOrderComponent
+    PurchaseOrderComponent,
+    PurchaseOrderDialogComponent
   ],
   entryComponents: [
-
+    PurchaseOrderComponent,
+    PurchaseOrderDialogComponent
   ],
   providers: [
 

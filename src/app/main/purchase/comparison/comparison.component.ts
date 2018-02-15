@@ -15,13 +15,18 @@ import { Supplier } from '../../../setup/supplier/supplier';
 import { SupplierService } from '../../../setup/supplier/supplier.service';
 import { ItemType } from '../../../setup/item-type/item-type';
 import { ItemTypeService } from '../../../setup/item-type/item-type.service';
+import { Item } from '../../../setup/item/item';
+import { ItemService } from '../../../setup/item/item.service';
+import { ItemWithCompare } from '../comparison/item-with-compare';
+import { ItemWithComparisonService } from '../comparison/item-with-comparison.service';
 import { forEach } from '@angular/router/src/utils/collection';
+import { ListSupplier } from './item-with-compare';
 
 @Component({
   selector: 'app-purchase-comparison',
   templateUrl: './comparison.component.html',
   styleUrls: ['./comparison.component.scss'],
-  providers: [ComparisonService, SupplierService, ItemTypeService]
+  providers: [ComparisonService, SupplierService, ItemTypeService, ItemService, ItemWithComparisonService]
 })
 export class ComparisonComponent implements OnInit, AfterViewInit {
 
@@ -39,6 +44,8 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
   temp = [];
   suppliers = [];
   types = [];
+  items = [];
+  item_with_compare = [];
 
   compare_bys = [
     {value: 'by_item', viewValue: 'By Item'},
@@ -50,6 +57,8 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
               private _logService: LogsService,
               private _supplierService: SupplierService,
               private _itemTypeService: ItemTypeService,
+              private _itemService: ItemService,
+              private _itemWithCompareService: ItemWithComparisonService,
               public media: TdMediaService,
               public snackBar: MatSnackBar,
               private dialog: MatDialog) {
@@ -62,6 +71,7 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.getSupplierData();
     this.getItemTypeData();
+    this.getItemData();
     this.load();
   }
 
@@ -116,8 +126,19 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
       this._itemTypeService.rows = [];
       snapshot.forEach((s) => {
 
-        const _row = new Supplier(s.val());
+        const _row = new ItemType(s.val());
         this.types.push(_row);
+      });
+    });
+  }
+
+  getItemData() {
+    this._itemService.requestData().subscribe((snapshot) => {
+      this._itemService.rows = [];
+      snapshot.forEach((s) => {
+
+        const _row = new Item(s.val());
+        this.item_with_compare.push(_row);
       });
     });
   }
@@ -248,6 +269,48 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
           this.snackBar.open('Error : ' + err.message, '', {duration: 3000});
         });
       }
+    });
+  }
+
+processData() {
+    // console.log('IWC0 add:' + JSON.stringify(this.item_with_compare));
+    this.temp.forEach((temp_list) => {
+      // console.log('Data : ' + JSON.stringify(temp_list));
+      temp_list.item.forEach((tmp2) => {
+        // console.log('tmp2 : ' + JSON.stringify(tmp2));
+        // console.log('temp_list Code : ' + temp_list.code);
+        if (!tmp2.unit) {
+          tmp2.unit = '';
+        }
+        const list_supplier = {
+          code: temp_list.supplier,
+          name1: temp_list.supplier_name1,
+          name2: temp_list.supplier_name2,
+          price: tmp2.price,
+          unit: tmp2.unit
+        };
+        // console.log('list_supplier : ' + JSON.stringify(list_supplier));
+        this.item_with_compare.forEach((itwc) => {
+          // console.log('itwc : ' + JSON.stringify(itwc));
+          if (itwc.code === tmp2.code) {
+            if (itwc.list_supplier) {
+              itwc.list_supplier = itwc.list_supplier.filter((_supplier) => _supplier.code !== list_supplier.code);
+              itwc.list_supplier.push(list_supplier);
+            } else {
+              itwc.list_supplier = [];
+              itwc.list_supplier.push(list_supplier);
+            }
+
+            if (itwc.price > tmp2.price) {
+              itwc.price = tmp2.price;
+              // console.log('IWC up:' + JSON.stringify(this.item_with_compare));
+            }
+
+            itwc.unit = tmp2.unit;
+            this._itemWithCompareService.updateData(itwc);
+          }
+        });
+      });
     });
   }
 

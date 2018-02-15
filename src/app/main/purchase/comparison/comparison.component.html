@@ -9,7 +9,7 @@
       <span *ngIf="!searchBox.searchVisible" flex>{{'Comparison' | translate:lang}}</span>
       <span *ngIf="!searchBox.searchVisible" flex></span>
 
-      <mat-form-field *ngIf="!searchBox.searchVisible" flex>
+      <mat-form-field style="width: 150px" *ngIf="!searchBox.searchVisible" flex>
         <mat-select placeholder="Compare By" class="push-bottom-none">
           <mat-option *ngFor="let compare_by of compare_bys" [value]="compare_by.value">
             {{ compare_by.viewValue }}
@@ -17,24 +17,22 @@
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field *ngIf="!searchBox.searchVisible" flex>
+      <mat-form-field style="width: 200px" *ngIf="!searchBox.searchVisible" flex>
         <input matInput
                placeholder="Period"
-               [max]="period_to"
                [matDatepicker]="period_from" flex>
                <!--[value]="period_from | date:'dd/MM/yyyy' flex>"-->
         <mat-datepicker-toggle matSuffix [for]="period_from" style="font-size: 20px;"></mat-datepicker-toggle>
         <mat-datepicker #period_from></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field *ngIf="!searchBox.searchVisible" flex>
+      <mat-form-field style="width: 200px" *ngIf="!searchBox.searchVisible" flex>
         <input matInput
                placeholder="To"
-               [min]="period_from"
                [matDatepicker]="period_to" flex>
                <!--[value]="period_to | date:'dd/MM/yyyy'" flex>-->
         <mat-datepicker-toggle matSuffix [for]="period_to" style="font-size: 20px;"></mat-datepicker-toggle>
-        <mat-datepicker #period_to></mat-datepicker>
+        <mat-datepicker #period_to maxlength="year" startView="year"></mat-datepicker>
       </mat-form-field>
 
       <td-search-box #searchBox (keyup)='updateFilter($event)' (clear)="updateFilter('')" backIcon="arrow_back"
@@ -42,7 +40,8 @@
       </td-search-box>
 
       <span>
-      <!--<a mat-icon-button mat-tooltip="History" class="btn-icon push-right-sm" (click)="openLogs(null)"><mat-icon>history</mat-icon></a>-->
+      <!--<a mat-icon-button mat-tooltip="Search" class="btn-icon push-right-sm"><mat-icon>search</mat-icon></a>-->
+      <a mat-icon-button mat-tooltip="History" class="btn-icon push-right-sm" (click)="openLogs(null)"><mat-icon>history</mat-icon></a>
         <!--<button mat-icon-button mat-tooltip="History"><mat-icon>history</mat-icon></button>-->
         <!--<button mat-icon-button mat-tooltip="More..." [matMenuTriggerFor]="toolbarMenu"><mat-icon>more_vert</mat-icon></button>-->
         <!--<mat-menu #toolbarMenu="matMenu">-->
@@ -51,10 +50,12 @@
         <!--<span>Export</span>-->
         <!--</button>-->
         <!--</mat-menu>-->
-      <a mat-raised-button tdMediaToggle="xs" [mediaStyles]="{display: 'none'}" class="btn-blue" (click)="addData()">
-        <mat-icon>add</mat-icon> By Item</a>
-      <!--<a mat-raised-button tdMediaToggle="xs" [mediaStyles]="{display: 'none'}" color="primary" (click)="addData()">
-        <mat-icon>add</mat-icon> By Project</a>-->
+        <!--<a mat-raised-button tdMediaToggle="xs" [mediaStyles]="{display: 'none'}" class="btn-blue" (click)="addData()">
+          <mat-icon>add</mat-icon> By Item</a>
+        <a mat-raised-button tdMediaToggle="xs" [mediaStyles]="{display: 'none'}" color="primary" (click)="addData()">
+          <mat-icon>add</mat-icon> By Project</a>-->
+        <a mat-raised-button tdMediaToggle="xs" [mediaStyles]="{display: 'none'}" color="primary" (click)="addData()">
+          <mat-icon>add</mat-icon> Add Comparison By Item</a>
     </span>
 
     </div>
@@ -203,7 +204,7 @@
 
         <mat-divider></mat-divider>
         <div layout="row" layout-align="start center">
-          <span>
+          <span flex>
             <button mat-button class="text-upper" color="primary" (click)="processData()">
             <mat-icon>sync</mat-icon> Process</button>
           <button mat-button class="text-upper" color="accent">

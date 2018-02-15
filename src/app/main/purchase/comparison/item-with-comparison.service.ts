@@ -1,16 +1,15 @@
-import { Injectable } from '@angular/core';
-import { Page } from '../../../shared/model/page';
-import { Observable } from 'rxjs/Rx';
-import { PagedData } from '../../../shared/model/paged-data';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database-deprecated';
-import { PurchaseOrder } from './purchase-order';
+import {Injectable} from '@angular/core';
+import {AngularFireDatabase, FirebaseListObservable} from 'angularfire2/database-deprecated';
+import {Page} from '../../../shared/model/page';
+import {Observable} from 'rxjs';
+import {PagedData} from '../../../shared/model/paged-data';
+import { ItemWithCompare, ListSupplier } from './item-with-compare';
 
 @Injectable()
-export class PurchaseOrderService {
-
+export class ItemWithComparisonService {
   lists: FirebaseListObservable<any>;
-  rows: PurchaseOrder [] = [];
-  _path: string = '/main/purchase/purchase_order';
+  rows: ItemWithCompare [] = [];
+  _path: string = '/main/purchase/item_with_compare';
 
   constructor(private agFb: AngularFireDatabase) {
     this.lists = agFb.list(this._path, {preserveSnapshot: true});
@@ -24,24 +23,31 @@ export class PurchaseOrderService {
     return this.lists;
   }
 
-  addData(data: PurchaseOrder) {
+  requestDataByCode(code: string) {
+    return this.agFb.list(this._path, {
+      query: {
+        orderByChild: 'code',
+        equalTo: code
+      }
+    });  }
+
+  addData(data: ItemWithCompare) {
     return this.lists.update(data.code, data);
   }
 
-  updateData(data: PurchaseOrder) {
+  updateData(data: ItemWithCompare) {
     return this.lists.update(data.code, data);
   }
 
-  updateDataStatus(data: PurchaseOrder, active: boolean) {
+  updateDataStatus(data: ItemWithCompare, active: boolean) {
     return this.lists.update(data.code, {
       disable: active
     });
   }
 
-  removeData(data: PurchaseOrder) {
+  removeData(data: ItemWithCompare) {
     return this.lists.remove(data.code);
   }
-
 
   requestLastData(prefix: string) {
     return this.agFb.list(this._path, {
@@ -53,19 +59,19 @@ export class PurchaseOrderService {
     });
   }
 
-  public getResults(page: Page): Observable<PagedData<PurchaseOrder>> {
+  public getResults(page: Page): Observable<PagedData<ItemWithCompare>> {
     return Observable.of(this.rows).map((data) => this.getPagedData(page));
   }
 
-  private getPagedData(page: Page): PagedData<PurchaseOrder> {
-    const pagedData = new PagedData<PurchaseOrder>();
+  private getPagedData(page: Page): PagedData<ItemWithCompare> {
+    const pagedData = new PagedData<ItemWithCompare>();
     page.totalElements = this.rows.length;
     page.totalPages = page.totalElements / page.size;
     const start = page.pageNumber * page.size;
     const end = Math.min((start + page.size), page.totalElements);
     for (let i = start; i < end; i++) {
       const jsonObj = this.rows[i];
-      pagedData.data.push(new PurchaseOrder(jsonObj));
+      pagedData.data.push(new ItemWithCompare(jsonObj));
     }
     pagedData.page = page;
     return pagedData;

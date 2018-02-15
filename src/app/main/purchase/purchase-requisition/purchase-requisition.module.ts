@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
-import {PurchaseRequisitionRouting} from './purchase-requisition.routing';
-import {PurchaseRequisitionComponent} from './purchase-requisition.component';
-
 import {CommonModule} from '@angular/common';
 import {LocaleService, TranslationModule, TranslationService} from 'angular-l10n';
 import {SharedModule} from '../../../shared/shared.module';
 import {GalleryConfig, GalleryModule} from 'ng-gallery';
 import {BarRatingModule} from 'ngx-bar-rating';
+import {PurchaseRequisitionRouting} from './purchase-requisition.routing';
+import {PurchaseRequisitionComponent} from './purchase-requisition.component';
+import { PurchaseRequisitionDialogComponent } from './purchase-requisition-dialog/purchase-requisition-dialog.component';
 
 @NgModule({
   imports: [
@@ -43,10 +43,12 @@ import {BarRatingModule} from 'ngx-bar-rating';
     ),
   ],
   declarations: [
-    PurchaseRequisitionComponent
+    PurchaseRequisitionComponent,
+    PurchaseRequisitionDialogComponent
   ],
   entryComponents: [
-
+    PurchaseRequisitionComponent,
+    PurchaseRequisitionDialogComponent
   ],
   providers: [
 

@@ -22,8 +22,8 @@
         <!--<span>Export</span>-->
         <!--</button>-->
         <!--</mat-menu>-->
-      <a mat-raised-button tdMediaToggle="xs" [mediaStyles]="{display: 'none'}" color="primary">
-        <mat-icon>add</mat-icon> Add</a>
+      <a mat-raised-button tdMediaToggle="xs" [mediaStyles]="{display: 'none'}" color="primary" (click)="addData()">
+        <mat-icon>add</mat-icon> Add Purchase Order</a>
     </span>
 
     </div>
@@ -31,7 +31,7 @@
   </mat-toolbar>
 
   <div class="mat-content" fxFlex>
-    <!--<div slimScroll height="100%" disableFadeOut="true" borderRadius="0px" size="10px" opacity=".3" color="#000"
+    <div slimScroll height="100%" disableFadeOut="true" borderRadius="0px" size="10px" opacity=".3" color="#000"
          alwaysVisible="true">
       <mat-card style="margin:20px 40px;">
 
@@ -159,7 +159,7 @@
                        [pageSizeOptions]="[25, 50, 100, 250]">
         </mat-paginator>
       </mat-card>
-    </div>-->
+    </div>
   </div>
 
 </div>
@@ -168,21 +168,3 @@
   <!--[matMenuTriggerFor]="settingsMenu">-->
   <mat-icon>add</mat-icon>
 </a>
-<!--
-<mat-menu #settingsMenu="matMenu" [overlapTrigger]="false">
-  <td-menu style="width: 150px;">
-    <mat-nav-list dense>
-      <ng-template let-last="last" ngFor [ngForOf]="[0,1,2,3,4,5,6,7,8,9]">
-      <a mat-list-item>
-        <h4 mat-line><span class="text-wrap">By Item</span>
-        </h4>
-      </a>
-      <a mat-list-item>
-        <h4 mat-line><span class="text-wrap">By Project</span>
-        </h4>
-      </a>
-    </mat-nav-list>
-  </td-menu>
-</mat-menu>
--->
-

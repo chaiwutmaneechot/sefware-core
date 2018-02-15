@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {AngularFireDatabase, FirebaseListObservable} from 'angularfire2/database-deprecated';
-import { Comparison, ComparisonItem } from './comparison';
 import {Page} from '../../../shared/model/page';
 import {Observable} from 'rxjs';
 import {PagedData} from '../../../shared/model/paged-data';
+import { Comparison } from './comparison';
 
 @Injectable()
 export class ComparisonService {
