@@ -21,6 +21,7 @@ import { ItemWithCompare } from '../comparison/item-with-compare';
 import { ItemWithComparisonService } from '../comparison/item-with-comparison.service';
 import { forEach } from '@angular/router/src/utils/collection';
 import { ListSupplier } from './item-with-compare';
+import { ChangePriceComponent } from './change-price/change-price.component';
 
 @Component({
   selector: 'app-purchase-comparison',
@@ -46,6 +47,8 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
   types = [];
   items = [];
   item_with_compare = [];
+  period_from = new Date().getTime();
+  period_to = new Date().getTime();
 
   compare_bys = [
     {value: 'by_item', viewValue: 'By Item'},
@@ -161,6 +164,33 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
     this.menu_expand = !this.menu_expand;
   }
 
+  searchPeriod() {
+    const _period_from = new Date(this.period_from);
+    const _period_to = new Date(this.period_to);
+
+    // set time to 00:00:00
+    _period_from.setHours(0);
+    _period_from.setMinutes(0);
+    _period_from.setSeconds(0);
+
+    // set time to 23:59:59
+    _period_to.setHours(23);
+    _period_to.setMinutes(59);
+    _period_to.setSeconds(59);
+
+    // filter our data
+    const temp = this.temp.filter(function(d) {
+      return (d.period_from >= _period_from.getTime()) &&
+        (d.period_to <= _period_to.getTime());
+    });
+
+    // update the rows
+    this.rows = temp;
+    // Whenever the filter changes, always go back to the first page
+    // this.table.offset = 0;
+    console.log('from :' + _period_from + ' To :' + _period_to);
+  }
+
   addData() {
     const dialogRef = this.dialog.open(CompareByItemComponent, {
       disableClose: true,
@@ -272,9 +302,9 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
     });
   }
 
-processData() {
+  processData() {
     // console.log('IWC0 add:' + JSON.stringify(this.item_with_compare));
-    this.temp.forEach((temp_list) => {
+    this.rows.forEach((temp_list) => {
       // console.log('Data : ' + JSON.stringify(temp_list));
       temp_list.item.forEach((tmp2) => {
         // console.log('tmp2 : ' + JSON.stringify(tmp2));
@@ -282,6 +312,7 @@ processData() {
         if (!tmp2.unit) {
           tmp2.unit = '';
         }
+
         const list_supplier = {
           code: temp_list.supplier,
           name1: temp_list.supplier_name1,
@@ -301,16 +332,35 @@ processData() {
               itwc.list_supplier.push(list_supplier);
             }
 
-            if (itwc.price > tmp2.price) {
+            if (!itwc.price || itwc.price > tmp2.price) {
+              itwc.supplier = temp_list.supplier;
               itwc.price = tmp2.price;
+              itwc.unit = tmp2.unit;
               // console.log('IWC up:' + JSON.stringify(this.item_with_compare));
             }
 
-            itwc.unit = tmp2.unit;
             this._itemWithCompareService.updateData(itwc);
           }
         });
       });
+    });
+    this.snackBar.open('Process comparison complete', '', {duration: 3000});
+  }
+
+  changePrice() {
+    const dialogRef = this.dialog.open(ChangePriceComponent, {
+      disableClose: true,
+      maxWidth: '100vw',
+      width: '100%',
+      height: '100%'
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+        this.addLog('Create', 'Create comparison by item succeed', result, {});
+        // this.msgs = [];
+        // this.msgs.push({severity: 'success', detail: 'Data updated'});
+      }
     });
   }
 

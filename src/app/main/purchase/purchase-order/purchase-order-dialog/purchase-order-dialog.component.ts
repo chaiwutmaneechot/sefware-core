@@ -15,12 +15,15 @@ import { ItemSubGroupService } from '../../../../setup/item-sub-group/item-sub-g
 import { ItemSubGroup } from '../../../../setup/item-sub-group/item-sub-group';
 import { PurchaseOrderService } from '../../purchase-order/purchase-order.service';
 import { PurchaseOrder, PurchaseOrderItem } from '../../purchase-order/purchase-order';
+import { PurchaseRequisitionItem } from '../../purchase-requisition/purchase-requisition';
+import { ItemWithComparisonService } from '../../comparison/item-with-comparison.service';
+import { SupplierService } from '../../../../setup/supplier/supplier.service';
 
 @Component({
   selector: 'app-purchase-order-dialog',
   templateUrl: './purchase-order-dialog.component.html',
   styleUrls: ['./purchase-order-dialog.component.scss'],
-  providers: [PurchaseOrderService, ItemService, ItemTypeService, ItemGroupService, ItemSubGroupService, UomService]
+  providers: [PurchaseOrderService, ItemWithComparisonService, ItemService, ItemTypeService, ItemGroupService, ItemSubGroupService, SupplierService, UomService]
 })
 export class PurchaseOrderDialogComponent implements OnInit {
 
@@ -41,14 +44,22 @@ export class PurchaseOrderDialogComponent implements OnInit {
   subgroups = [];
   uoms = [];
 
+  vat_types = [
+    {code: 'none_vat', name: 'None VAT'},
+    {code: 'vat_inclusive', name: 'VAT Inclusive'},
+    {code: 'vat_exclusive', name: 'VAT Exclusive'}
+  ];
+
   storage_ref = '/main/settings/department';
 
   constructor(@Inject(MAT_DIALOG_DATA) public md_data: PurchaseOrder,
               private _purchaseOrderService: PurchaseOrderService,
+              private _itemWithComparisonService: ItemWithComparisonService,
               private _itemService: ItemService,
               private _itemtypeService: ItemTypeService,
               private _itemgroupService: ItemGroupService,
               private _itemsubgroupService: ItemSubGroupService,
+              private _supplierService: SupplierService,
               private _uomService: UomService,
               private _loadingService: TdLoadingService,
               public snackBar: MatSnackBar,
@@ -74,6 +85,7 @@ export class PurchaseOrderDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.getItemTypeData();
+    this.getSupplierData();
     this.getUnitData();
   }
 
@@ -220,6 +232,17 @@ export class PurchaseOrderDialogComponent implements OnInit {
     });
   }
 
+  getSupplierData() {
+    this._supplierService.requestData().subscribe((snapshot) => {
+      this._supplierService.rows = [];
+      snapshot.forEach((s) => {
+
+        const _row = new Supplier(s.val());
+        this.suppliers.push(_row);
+      });
+    });
+  }
+
   getUnitData() {
     this._uomService.requestData().subscribe((snapshot) => {
       this._uomService.rows = [];
@@ -252,8 +275,8 @@ export class PurchaseOrderDialogComponent implements OnInit {
     }
     console.log('Item Code :' + item_code);
 
-    this._itemService.requestDataByComparison(item_code).subscribe((snapshot) => {
-      this._itemService.rows = [];
+    this._itemWithComparisonService.requestItemData(item_code).subscribe((snapshot) => {
+      this._itemWithComparisonService.rows = [];
       snapshot.forEach((s) => {
         console.log('Itemss Data :' + JSON.stringify(s));
         const _row = new PurchaseOrderItem(s);
@@ -269,6 +292,10 @@ export class PurchaseOrderDialogComponent implements OnInit {
       });
     });
     this._loadingService.resolve();
+  }
+
+  calAmount(row) {
+    row.amount = (row.quantity * row.price) - row.discount;
   }
 
   openLink(link: string) {

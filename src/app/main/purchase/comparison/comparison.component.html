@@ -1,46 +1,61 @@
 <div fxLayout="column" style="height: 100%">
-  <mat-toolbar [ngClass]="{'editing':searchBox.searchVisible}">
+  <!--<mat-toolbar [ngClass]="{'editing':searchBox.searchVisible}">-->
+  <mat-toolbar>
     <div layout="row" layout-align="start center" flex>
 
-      <button *ngIf="!searchBox.searchVisible" mat-icon-button [tdLayoutManageListToggle]="true" (click)="toggleMenu()">
+      <button mat-icon-button [tdLayoutManageListToggle]="true" (click)="toggleMenu()">
       <mat-icon>{{menu_expand?'keyboard_arrow_left':'keyboard_arrow_right'}}</mat-icon>
       </button>
 
-      <span *ngIf="!searchBox.searchVisible" flex>{{'Comparison' | translate:lang}}</span>
-      <span *ngIf="!searchBox.searchVisible" flex></span>
+      <span flex>{{'Comparison' | translate:lang}}</span>
+      <span flex></span>
 
-      <mat-form-field style="width: 150px" *ngIf="!searchBox.searchVisible" flex>
-        <mat-select placeholder="Compare By" class="push-bottom-none">
+      <mat-form-field style="width: 150px" flex>
+        <mat-select placeholder="Compare By" class="push-bottom-none" disabled>
           <mat-option *ngFor="let compare_by of compare_bys" [value]="compare_by.value">
             {{ compare_by.viewValue }}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field style="width: 200px" *ngIf="!searchBox.searchVisible" flex>
+      <mat-form-field style="width: 200px" flex>
         <input matInput
-               placeholder="Period"
-               [matDatepicker]="period_from" flex>
-               <!--[value]="period_from | date:'dd/MM/yyyy' flex>"-->
-        <mat-datepicker-toggle matSuffix [for]="period_from" style="font-size: 20px;"></mat-datepicker-toggle>
-        <mat-datepicker #period_from></mat-datepicker>
+               readonly
+               name="period_from"
+               [ngModel]="period_from | date:'dd/MM/yyyy'"
+               (ngModelChange)="period_from = $event"
+               placeholder="Period" flex>
+        <input matInput
+               [max]="period_enddate_datepicker._selected"
+               [matDatepicker]="period_startdate_datepicker"
+               style="display: none;"
+               (dateChange)="period_from = period_startdate_datepicker._selected.getTime()" flex>
+        <mat-datepicker-toggle matSuffix [for]="period_startdate_datepicker" style="font-size: 20px;"></mat-datepicker-toggle>
+        <mat-datepicker #period_startdate_datepicker></mat-datepicker>
       </mat-form-field>
 
-      <mat-form-field style="width: 200px" *ngIf="!searchBox.searchVisible" flex>
+      <mat-form-field style="width: 200px" flex>
         <input matInput
-               placeholder="To"
-               [matDatepicker]="period_to" flex>
-               <!--[value]="period_to | date:'dd/MM/yyyy'" flex>-->
-        <mat-datepicker-toggle matSuffix [for]="period_to" style="font-size: 20px;"></mat-datepicker-toggle>
-        <mat-datepicker #period_to maxlength="year" startView="year"></mat-datepicker>
+               readonly
+               name="period_to"
+               [ngModel]="period_to | date:'dd/MM/yyyy'"
+               (ngModelChange)="period_to = $event"
+               placeholder="To" flex>
+        <input matInput
+               [min]="period_startdate_datepicker._selected"
+               [matDatepicker]="period_enddate_datepicker"
+               style="display: none;"
+               (dateChange)="period_to = period_enddate_datepicker._selected.getTime()">
+        <mat-datepicker-toggle matSuffix [for]="period_enddate_datepicker" style="font-size: 20px;"></mat-datepicker-toggle>
+        <mat-datepicker #period_enddate_datepicker></mat-datepicker>
       </mat-form-field>
 
-      <td-search-box #searchBox (keyup)='updateFilter($event)' (clear)="updateFilter('')" backIcon="arrow_back"
-                     class="btn-icon" placeholder="Filter by any keyword" flex>
-      </td-search-box>
+      <!--<td-search-box #searchBox (keyup)='updateFilter($event)' (clear)="updateFilter('')" backIcon="arrow_back"-->
+                     <!--class="btn-icon" placeholder="Filter by any keyword" flex>-->
+      <!--</td-search-box>-->
 
       <span>
-      <!--<a mat-icon-button mat-tooltip="Search" class="btn-icon push-right-sm"><mat-icon>search</mat-icon></a>-->
+      <a mat-icon-button mat-tooltip="Search" class="btn-icon push-right-sm" (click)="searchPeriod()"><mat-icon>search</mat-icon></a>
       <a mat-icon-button mat-tooltip="History" class="btn-icon push-right-sm" (click)="openLogs(null)"><mat-icon>history</mat-icon></a>
         <!--<button mat-icon-button mat-tooltip="History"><mat-icon>history</mat-icon></button>-->
         <!--<button mat-icon-button mat-tooltip="More..." [matMenuTriggerFor]="toolbarMenu"><mat-icon>more_vert</mat-icon></button>-->
@@ -207,7 +222,7 @@
           <span flex>
             <button mat-button class="text-upper" color="primary" (click)="processData()">
             <mat-icon>sync</mat-icon> Process</button>
-          <button mat-button class="text-upper" color="accent">
+          <button mat-button class="text-upper" color="accent" (click)="changePrice()">
             <mat-icon>monetization_on</mat-icon> Change Price</button>
           </span>
           <mat-paginator #paginator

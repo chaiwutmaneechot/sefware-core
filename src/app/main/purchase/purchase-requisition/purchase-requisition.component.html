@@ -48,9 +48,9 @@
 
           <ngx-datatable-column
             prop="code"
-            name="Code"
+            name="Document No"
             [minWidth]="50"
-            [width]="75">
+            [width]="100">
             <ng-template let-row="row" ngx-datatable-cell-template>
               <div style="text-align: left" class="text-truncate">
                 {{row.code}}
@@ -60,20 +60,27 @@
 
 
           <ngx-datatable-column
-            [minWidth]="100"
+            [minWidth]="50"
+            [width]="100"
             [canAutoResize]="true"
-            prop="name"
-            name="Name">
+            prop="document_date"
+            name="Document Date">
             <ng-template let-row="row" ngx-datatable-cell-template>
-              <div fxLayout="column">
-                <div [ngClass]="{'twoline-title': row.name_eng}" style="text-align: left;padding-bottom: 0px;"
-                     class="text-truncate">
-                  {{row.name}}
-                </div>
-                <div *ngIf="row.name_eng" class="text-truncate"
-                     style="padding-top: 5px;text-align: left;line-height: 5px;font-size: 0.7rem;opacity: 0.8;">
-                  {{row.name_eng}}
-                </div>
+              <div style="text-align: left" class="text-truncate">
+                {{row.document_date | date: 'dd/MM/yyyy'}}
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column
+            [minWidth]="50"
+            [width]="100"
+            [canAutoResize]="true"
+            prop="document_date"
+            name="Document Date">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div style="text-align: left" class="text-truncate">
+                {{row.delivery_date | date: 'dd/MM/yyyy'}}
               </div>
             </ng-template>
           </ngx-datatable-column>
@@ -81,11 +88,23 @@
           <ngx-datatable-column
             [width]="100"
             [minWidth]="50"
-            prop="detail"
-            name="Description">
+            prop="user"
+            name="User Request">
             <ng-template let-row="row" ngx-datatable-cell-template>
               <div style="text-align: left" class="text-truncate">
-                {{row.detail}}
+                {{row.user_request}}
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column
+            [width]="200"
+            [minWidth]="100"
+            prop="remark"
+            name="Remark">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div style="text-align: left" class="text-truncate">
+                {{row.remark}}
               </div>
             </ng-template>
           </ngx-datatable-column>

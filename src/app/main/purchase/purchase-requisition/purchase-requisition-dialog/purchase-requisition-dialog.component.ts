@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar } from '@angular/
 import {TdLoadingService} from '@covalent/core';
 import * as _ from 'lodash';
 import { Supplier } from '../../../../setup/supplier/supplier';
+import { ItemWithComparisonService } from '../../comparison/item-with-comparison.service';
 import { ItemService } from '../../../../setup/item/item.service';
 import { Page } from '../../../../shared/model/page';
 import { ItemGroupService } from '../../../../setup/item-group/item-group.service';
@@ -20,7 +21,7 @@ import { PurchaseRequisition, PurchaseRequisitionItem } from '../../purchase-req
   selector: 'app-purchase-requisition-dialog',
   templateUrl: './purchase-requisition-dialog.component.html',
   styleUrls: ['./purchase-requisition-dialog.component.scss'],
-  providers: [PurchaseRequisitionService, ItemService, ItemTypeService, ItemGroupService, ItemSubGroupService, UomService]
+  providers: [PurchaseRequisitionService, ItemWithComparisonService, ItemService, ItemTypeService, ItemGroupService, ItemSubGroupService, UomService]
 })
 export class PurchaseRequisitionDialogComponent implements OnInit {
 
@@ -45,6 +46,7 @@ export class PurchaseRequisitionDialogComponent implements OnInit {
 
   constructor(@Inject(MAT_DIALOG_DATA) public md_data: PurchaseRequisition,
               private _purchaseRequisitionService: PurchaseRequisitionService,
+              private _itemWithComparisonService: ItemWithComparisonService,
               private _itemService: ItemService,
               private _itemtypeService: ItemTypeService,
               private _itemgroupService: ItemGroupService,
@@ -252,8 +254,8 @@ export class PurchaseRequisitionDialogComponent implements OnInit {
     }
     console.log('Item Code :' + item_code);
 
-    this._itemService.requestDataByComparison(item_code).subscribe((snapshot) => {
-      this._itemService.rows = [];
+    this._itemWithComparisonService.requestItemData(item_code).subscribe((snapshot) => {
+      this._itemWithComparisonService.rows = [];
       snapshot.forEach((s) => {
         console.log('Itemss Data :' + JSON.stringify(s));
         const _row = new PurchaseRequisitionItem(s);

@@ -11,12 +11,14 @@ import { PurchaseOrderService } from '../purchase-order/purchase-order.service';
 import { PurchaseOrder } from '../purchase-order/purchase-order';
 import { PurchaseOrderDialogComponent } from './purchase-order-dialog/purchase-order-dialog.component';
 import { Comparison } from '../comparison/comparison';
+import { SupplierService } from '../../../setup/supplier/supplier.service';
+import { Supplier } from '../../../setup/supplier/supplier';
 
 @Component({
   selector: 'app-purchase-purchase-order',
   templateUrl: './purchase-order.component.html',
   styleUrls: ['./purchase-order.component.scss'],
-  providers: [PurchaseOrderService, LogsService]
+  providers: [PurchaseOrderService, SupplierService, LogsService]
 })
 export class PurchaseOrderComponent implements OnInit, AfterViewInit {
 
@@ -32,10 +34,12 @@ export class PurchaseOrderComponent implements OnInit, AfterViewInit {
 
   rows: any[] = [];
   temp = [];
+  suppliers = [];
 
   constructor(private _purchaseOrderService: PurchaseOrderService,
               private _changeDetectorRef: ChangeDetectorRef,
               private _logService: LogsService,
+              private _supplierService: SupplierService,
               public media: TdMediaService,
               public snackBar: MatSnackBar,
               private dialog: MatDialog) {
@@ -44,6 +48,7 @@ export class PurchaseOrderComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.getSupplierData();
     this.load();
   }
 
@@ -57,13 +62,30 @@ export class PurchaseOrderComponent implements OnInit, AfterViewInit {
     this._purchaseOrderService.requestData().subscribe((snapshot) => {
       this._purchaseOrderService.rows = [];
       snapshot.forEach((s) => {
-        const _row = new Comparison(s.val());
+        const _row = new PurchaseOrder(s.val());
+        this.suppliers.forEach((sup) => {
+          if (_row.supplier === sup.code) {
+            _row.supplier_name1 = sup.name1;
+            _row.supplier_name2 = sup.name2;
+          }
+        });
         this._purchaseOrderService.rows.push(_row);
       });
 
       this.temp = [...this._purchaseOrderService.rows];
       this.loading = false;
       this.setPage(null);
+    });
+  }
+
+  getSupplierData() {
+    this._supplierService.requestData().subscribe((snapshot) => {
+      this._supplierService.rows = [];
+      snapshot.forEach((s) => {
+
+        const _row = new Supplier(s.val());
+        this.suppliers.push(_row);
+      });
     });
   }
 

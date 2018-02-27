@@ -29,7 +29,18 @@ export class ItemWithComparisonService {
         orderByChild: 'code',
         equalTo: code
       }
-    });  }
+    });
+  }
+
+  requestItemData(prefix: string) {
+    return this.agFb.list(this._path, {
+      query: {
+        orderByChild: 'code',
+        startAt: prefix + '',
+        endAt: prefix + '9'
+      }
+    });
+  }
 
   addData(data: ItemWithCompare) {
     return this.lists.update(data.code, data);

@@ -1,0 +1,140 @@
+<td-layout-nav toolbarTitle="Change Price" class="container">
+  <button mat-icon-button td-menu-button mat-dialog-close>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <div td-toolbar-content layout="row" layout-align="start center" flex>
+    <span flex></span>
+    <td-search-box #searchBox (keyup)='updateFilter($event)' (clear)="updateFilter('')" backIcon="search"
+    class="btn-icon" placeholder="Filter by any keyword" flex>
+    </td-search-box>
+
+    <!--<span>-->
+    <!--<a mat-icon-button mat-tooltip="History" class="btn-icon push-right-sm" (click)="openLogs(null)"><mat-icon>history</mat-icon></a>-->
+    <!--</span>-->
+  </div>
+
+  <td-layout-card-over cardTitle="" cardSubtitle="">
+    <mat-card-title>
+      <div layout="row" layout-align="start end" flex>
+        <span flex></span>
+        <button mat-button class="text-upper" mat-dialog-close>
+          <mat-icon>cancel</mat-icon> Cancel</button>
+        <button mat-button class="text-upper" color="primary" (click)="saveData()">
+          <mat-icon>save</mat-icon> Save</button>
+      </div>
+    </mat-card-title>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-content>
+      <ngx-datatable
+        #dataTable
+        class="data-table"
+        [rows]="rows"
+        [columnMode]="'force'"
+        [headerHeight]="35"
+        [scrollbarH]="true"
+        [rowHeight]="'auto'"
+        [sorts]="[{prop: 'prop', dir: 'desc'}]"
+        [limit]="page.size"
+      >
+
+        <ngx-datatable-column [sortable]="false" name="No." width="100">
+          <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+            <div style="text-align: left" class="text-truncate">
+              {{rowIndex+1}}.
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
+          prop="code"
+          name="Code"
+          [minWidth]="75"
+          [width]="150">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div style="text-align: left" class="text-truncate">
+              {{row.code}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+
+        <ngx-datatable-column
+          [width]="200"
+          [minWidth]="100"
+          [canAutoResize]="true"
+          prop="name"
+          name="Description">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div fxLayout="column">
+              <div [ngClass]="{'twoline-title': row.name1}" style="text-align: left;padding-bottom: 0px;"
+                   class="text-truncate">
+                {{row.name1}}
+              </div>
+              <div *ngIf="row.name1" class="text-truncate"
+                   style="padding-top: 5px;text-align: left;line-height: 5px;font-size: 0.7rem;opacity: 0.8;">
+                {{row.name2}}
+              </div>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
+          [width]="100"
+          [minWidth]="50"
+          [canAutoResize]="true"
+          prop="price"
+          name="Price">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div style="text-align: right" class="text-truncate">
+              {{row.price}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
+          [width]="150"
+          [minWidth]="75"
+          [canAutoResize]="true"
+          prop="unit"
+          name="Unit">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <div style="text-align: left" class="text-truncate" *ngIf="row.unit">
+              {{row.unit}} : {{row.unit_name}}
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
+          [width]="200"
+          [minWidth]="100"
+          [canAutoResize]="true"
+          prop="supplier"
+          name="Supplier">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <mat-form-field style="max-width: 75%;">
+              <mat-select #unitControl="ngModel"
+                          [ngModelOptions]="{standalone: true}"
+                          [(ngModel)]="row.supplier" (change)="changeValue(row)">
+                <mat-option *ngFor="let supplier of row.list_supplier" [value]="supplier.code">{{supplier.code}} : {{supplier.name1}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+
+      <div class="mat-padding" *ngIf="data?.length === 0" layout="row" layout-align="center center">
+        <h3>No data to display.</h3>
+      </div>
+
+      <mat-paginator #paginator
+                     [length]="page.totalElements"
+                     [pageIndex]="page.pageNumber"
+                     [pageSize]="page.size"
+                     (page)="setPage($event)"
+                     [pageSizeOptions]="[25, 50, 100, 250]" flex>
+      </mat-paginator>
+    </mat-card-content>
+  </td-layout-card-over>
+</td-layout-nav>

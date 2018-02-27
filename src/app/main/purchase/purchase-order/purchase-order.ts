@@ -6,9 +6,12 @@ export class PurchaseOrder {
   type?: string = '';
   group?: string = '';
   subgroup?: string = '';
-  user_request?: string | null | undefined;
+  supplier?: string | null | undefined;
+  supplier_name1?: string | null | undefined;
+  supplier_name2?: string | null | undefined;
   remark?: string | null | undefined;
   status?: string | null | undefined;
+  vat_type?: string | null | undefined;
   disable?: boolean = false;
   item?: PurchaseOrderItem[] = [];
 
@@ -31,6 +34,9 @@ export class PurchaseOrderItem {
   unit?: string | null | undefined;
   disable?: boolean = false;
   quantity?: number = 0;
+  price?: number = 0;
+  discount?: number = 0;
+  amount?: number = 0;
 
   constructor(params: PurchaseOrderItem) {
     Object.assign(this, params);

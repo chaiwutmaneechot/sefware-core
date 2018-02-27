@@ -28,93 +28,105 @@
     <mat-divider></mat-divider>
 
     <mat-card-content class="push-bottom-none">
-      <div layout="row" layout-align="start center" flex>
-        <mat-form-field style="padding: 0px 10px;" flex>
-          <input matInput
-                 readonly
-                 name="period_from"
-                 [ngModel]="data.period_from | date:'dd/MM/yyyy'"
-                 (ngModelChange)="data.period_from = $event"
-                 placeholder="Period" flex>
-          <input matInput
-                 [max]="period_enddate_datepicker._selected"
-                 [matDatepicker]="period_startdate_datepicker"
-                 style="display: none;"
-                 (dateChange)="data.period_from = period_startdate_datepicker._selected.getTime()" flex>
-          <mat-datepicker-toggle matSuffix [for]="period_startdate_datepicker" style="font-size: 20px;"></mat-datepicker-toggle>
-          <mat-datepicker #period_startdate_datepicker></mat-datepicker>
-        </mat-form-field>
+      <mat-divider></mat-divider>
 
-        <mat-form-field style="padding: 0px 10px;" flex>
-          <input matInput
-                 readonly
-                 name="period_to"
-                 [ngModel]="data.period_to | date:'dd/MM/yyyy'"
-                 (ngModelChange)="data.period_to = $event"
-                 placeholder="To" flex>
-          <input matInput
-                 [min]="period_startdate_datepicker._selected"
-                 [matDatepicker]="period_enddate_datepicker"
-                 style="display: none;"
-                 (dateChange)="data.period_to = period_enddate_datepicker._selected.getTime()">
-          <mat-datepicker-toggle matSuffix [for]="period_enddate_datepicker" style="font-size: 20px;"></mat-datepicker-toggle>
-          <mat-datepicker #period_enddate_datepicker></mat-datepicker>
-        </mat-form-field>
+      <div layout="row" layout-align="start center">
+        <mat-card-content class="push-buttom-none" style="width: 25vw;margin: 10px; background-color: #e0e0e0;">
+          <div layout="row">
+            <mat-form-field style="padding: 0px 10px;" flex>
+              <input matInput
+                     readonly
+                     name="document_date"
+                     [ngModel]="data.document_date | date:'dd/MM/yyyy'"
+                     placeholder="Document Date" flex>
+            </mat-form-field>
+          </div>
 
-        <mat-form-field style="padding: 0px 10px;" flex>
-          <mat-select placeholder="Supplier"
-                      #supplierControl="ngModel"
-                      [ngModelOptions]="{standalone: true}"
-                      [(ngModel)]="data.supplier">
-            <mat-option *ngFor="let supplier of suppliers" [value]="supplier.code">{{supplier.code}} : {{supplier.name1}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+          <div layout="row">
+            <mat-form-field style="padding: 0px 10px;" flex>
+              <input matInput
+                     readonly
+                     name="delivery_date"
+                     [ngModel]="data.delivery_date | date:'dd/MM/yyyy'"
+                     (ngModelChange)="data.delivery_date = $event"
+                     placeholder="Delivery Date" flex>
+              <input matInput
+                     [matDatepicker]="delivery_date_datepicker"
+                     style="display: none;"
+                     (dateChange)="data.delivery_date = delivery_date_datepicker._selected.getTime()">
+              <mat-datepicker-toggle matSuffix [for]="delivery_date_datepicker" style="font-size: 20px;"></mat-datepicker-toggle>
+              <mat-datepicker #delivery_date_datepicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
 
-      <div layout="row" layout-align="start center" flex>
-        <mat-form-field style="padding: 0px 10px;" flex>
-          <mat-select placeholder="Type"
-                      #typeControl="ngModel"
-                      [ngModelOptions]="{standalone: true}"
-                      (change)="getItemGroupData(data.type)"
-                      [(ngModel)]="data.type">
-            <mat-option *ngFor="let type of types" [value]="type.code">{{type.code}} : {{type.name1}}</mat-option>
-          </mat-select>
-        </mat-form-field>
+        <mat-card-content class="push-bottom-none" style="width: 75vw">
+          <div layout="row">
+            <mat-form-field style="padding: 0px 10px;" flex>
+              <mat-select placeholder="Type"
+                          #typeControl="ngModel"
+                          [ngModelOptions]="{standalone: true}"
+                          (change)="getItemGroupData(data.type)"
+                          [(ngModel)]="data.type">
+                <mat-option *ngFor="let type of types" [value]="type.code">{{type.code}} : {{type.name1}}</mat-option>
+              </mat-select>
+            </mat-form-field>
 
-        <mat-form-field style="padding: 0px 10px;" flex>
-          <mat-select placeholder="Group"
-                      #groupControl="ngModel"
-                      [ngModelOptions]="{standalone: true}"
-                      (change)="getItemSubGroupData(data.group)"
-                      [(ngModel)]="data.group">
-            <mat-option *ngFor="let group of groups" [value]="group.code">{{group.code}} : {{group.name1}}</mat-option>
-          </mat-select>
-        </mat-form-field>
+            <mat-form-field style="padding: 0px 10px;" flex>
+              <mat-select placeholder="Group"
+                          #groupControl="ngModel"
+                          [ngModelOptions]="{standalone: true}"
+                          (change)="getItemSubGroupData(data.group)"
+                          [(ngModel)]="data.group">
+                <mat-option *ngFor="let group of groups" [value]="group.code">{{group.code}} : {{group.name1}}</mat-option>
+              </mat-select>
+            </mat-form-field>
 
-        <mat-form-field style="padding: 0px 10px;" flex>
-          <mat-select placeholder="Sub Group"
-                      #subgroupControl="ngModel"
-                      [ngModelOptions]="{standalone: true}"
-                      [(ngModel)]="data.subgroup">
-            <mat-option *ngFor="let subgroup of subgroups" [value]="subgroup.code">{{subgroup.code}} : {{subgroup.name1}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+            <mat-form-field style="padding: 0px 10px;" flex>
+              <mat-select placeholder="Sub Group"
+                          #subgroupControl="ngModel"
+                          [ngModelOptions]="{standalone: true}"
+                          [(ngModel)]="data.subgroup">
+                <mat-option *ngFor="let subgroup of subgroups" [value]="subgroup.code">{{subgroup.code}} : {{subgroup.name1}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
 
-      <div layout="row" layout-align="start center" flex>
-        <mat-form-field style="padding: 0px 10px;" flex>
+          <div layout="row">
+            <mat-form-field style="padding: 0px 10px;" flex>
+              <mat-select placeholder="Supplier"
+                          #typeControl="ngModel"
+                          [ngModelOptions]="{standalone: true}"
+                          [(ngModel)]="data.supplier">
+                <mat-option *ngFor="let supplier of suppliers" [value]="supplier.code">{{supplier.code}} : {{supplier.name1}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field style="padding: 0px 10px;" flex>
+              <mat-select placeholder="VAT Type"
+                          #subgroupControl="ngModel"
+                          [ngModelOptions]="{standalone: true}"
+                          [(ngModel)]="data.vat_type">
+                <mat-option *ngFor="let vat_type of vat_types" [value]="vat_type.code">{{vat_type.name}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div layout="row">
+            <mat-form-field style="padding: 0px 10px;" flex>
             <textarea matInput
                       #remarkElement
                       #remarkControl="ngModel"
                       placeholder="Remark"
                       [(ngModel)]="data.remark"
                       name="remark"
-                      maxlength="250"></textarea>
-          <mat-hint align="start">
-          </mat-hint>
-          <mat-hint align="end">{{remarkElement.value?.length || 0}} / 250</mat-hint>
-        </mat-form-field>
+                      maxlength="250" style="height: 50px;"></textarea>
+              <mat-hint align="start">
+              </mat-hint>
+              <mat-hint align="end">{{remarkElement.value?.length || 0}} / 250</mat-hint>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
       </div>
     </mat-card-content>
 
@@ -146,7 +158,7 @@
         [limit]="page.size"
       >
 
-        <ngx-datatable-column [sortable]="false" name="No." width="100">
+        <ngx-datatable-column [sortable]="false" name="No." width="50">
           <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
             <div style="text-align: left" class="text-truncate">
               {{rowIndex+1}}.
@@ -158,7 +170,7 @@
           prop="code"
           name="Code"
           [minWidth]="75"
-          [width]="150">
+          [width]="100">
           <ng-template let-row="row" ngx-datatable-cell-template>
             <div style="text-align: left" class="text-truncate">
               {{row.code}}
@@ -168,7 +180,7 @@
 
 
         <ngx-datatable-column
-          [width]="200"
+          [width]="150"
           [minWidth]="100"
           [canAutoResize]="true"
           prop="name"
@@ -188,8 +200,29 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column
-          [width]="150"
-          [minWidth]="75"
+          [width]="75"
+          [minWidth]="50"
+          [canAutoResize]="true"
+          prop="quantity"
+          name="Quantity">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <mat-form-field style="max-width: 75%;">
+              <input matInput
+                     #quantityElement
+                     #quantityControl="ngModel"
+                     [(ngModel)]="row.quantity"
+                     style="text-align: end;"
+                     name="quantity"
+                     type="number"
+                     maxlength="8"
+                     (change)="calAmount(row)">
+            </mat-form-field>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
+          [width]="75"
+          [minWidth]="50"
           [canAutoResize]="true"
           prop="price"
           name="Price">
@@ -198,17 +231,18 @@
               <input matInput
                      #priceElement
                      #priceControl="ngModel"
-                     [(ngModel)]="row.quantity"
+                     [(ngModel)]="row.price"
                      style="text-align: end;"
                      name="price"
                      type="number"
-                     maxlength="8">
+                     maxlength="8"
+                     (change)="calAmount(row)">
             </mat-form-field>
           </ng-template>
         </ngx-datatable-column>
 
         <ngx-datatable-column
-          [width]="150"
+          [width]="125"
           [minWidth]="75"
           [canAutoResize]="true"
           prop="unit"
@@ -226,9 +260,51 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column
+          [width]="75"
+          [minWidth]="50"
+          [canAutoResize]="true"
+          prop="discount"
+          name="Discount">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <mat-form-field style="max-width: 75%;">
+              <input matInput
+                     #priceElement
+                     #priceControl="ngModel"
+                     [(ngModel)]="row.discount"
+                     style="text-align: end;"
+                     name="discount"
+                     type="number"
+                     maxlength="8"
+                     (change)="calAmount(row)">
+            </mat-form-field>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
+          [width]="75"
+          [minWidth]="50"
+          [canAutoResize]="true"
+          prop="amount"
+          name="Amount">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            <mat-form-field style="max-width: 75%;">
+              <input matInput
+                     #priceElement
+                     #priceControl="ngModel"
+                     [(ngModel)]="row.amount"
+                     style="text-align: end;"
+                     name="amount"
+                     type="number"
+                     maxlength="8"
+                     disabled>
+            </mat-form-field>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column
           [canAutoResize]="false"
           [resizeable]="false"
-          [width]="90">
+          [width]="75">
           <ng-template let-row="row" ngx-datatable-cell-template>
             <div style="text-align: center;" fxLayout="row">
               <button mat-icon-button mat-tooltip="Delete" color="warn" class="" (click)="deleteItemData(row)">

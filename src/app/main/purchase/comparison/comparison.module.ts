@@ -8,6 +8,7 @@ import {BarRatingModule} from 'ngx-bar-rating';
 
 import {ComparisonComponent} from './comparison.component';
 import { CompareByItemComponent } from './compare-by-item/compare-by-item.component';
+import { ChangePriceComponent } from './change-price/change-price.component';
 
 @NgModule({
   imports: [
@@ -45,10 +46,13 @@ import { CompareByItemComponent } from './compare-by-item/compare-by-item.compon
   ],
   declarations: [
     ComparisonComponent,
-    CompareByItemComponent
+    CompareByItemComponent,
+    ChangePriceComponent
   ],
   entryComponents: [
-    CompareByItemComponent
+    ComparisonComponent,
+    CompareByItemComponent,
+    ChangePriceComponent
   ],
   providers: [
 
