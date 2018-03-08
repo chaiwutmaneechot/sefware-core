@@ -6,7 +6,7 @@
         <mat-icon>{{menu_expand?'keyboard_arrow_left':'keyboard_arrow_right'}}</mat-icon>
       </button>
 
-      <span *ngIf="!searchBox.searchVisible">{{'Purchase Requisition' | translate:lang}}</span>
+      <span *ngIf="!searchBox.searchVisible">{{'User' | translate:lang}}</span>
 
       <td-search-box #searchBox (keyup)='updateFilter($event)' (clear)="updateFilter('')" backIcon="arrow_back"
                      class="btn-icon" placeholder="Filter by any keyword" flex>
@@ -14,8 +14,16 @@
 
       <span>
       <a mat-icon-button mat-tooltip="History" class="btn-icon push-right-sm" (click)="openLogs(null)"><mat-icon>history</mat-icon></a>
-      <a mat-raised-button tdMediaToggle="xs" [mediaStyles]="{display: 'none'}" color="primary" (click)="addData()">
-        <mat-icon>add</mat-icon> New Purchase Requisition</a>
+        <!--<button mat-icon-button mat-tooltip="History"><mat-icon>history</mat-icon></button>-->
+        <!--<button mat-icon-button mat-tooltip="More..." [matMenuTriggerFor]="toolbarMenu"><mat-icon>more_vert</mat-icon></button>-->
+        <!--<mat-menu #toolbarMenu="matMenu">-->
+        <!--<button mat-menu-item>-->
+        <!--<mat-icon>file_download</mat-icon>-->
+        <!--<span>Export</span>-->
+        <!--</button>-->
+        <!--</mat-menu>-->
+      <a mat-raised-button tdMediaToggle="xs" [mediaStyles]="{display: 'none'}" color="primary" (click)="addUser()">
+        <mat-icon>add</mat-icon> Add User</a>
     </span>
 
     </div>
@@ -48,8 +56,9 @@
 
           <ngx-datatable-column
             prop="code"
-            name="Document No"
-            [minWidth]="75">
+            name="Code"
+            [minWidth]="50"
+            [width]="75">
             <ng-template let-row="row" ngx-datatable-cell-template>
               <div style="text-align: left" class="text-truncate">
                 {{row.code}}
@@ -59,79 +68,46 @@
 
 
           <ngx-datatable-column
-            [minWidth]="50"
-            [width]="100"
-            prop="document_date"
-            name="Document Date">
-            <ng-template let-row="row" ngx-datatable-cell-template>
-              <div style="text-align: left" class="text-truncate">
-                {{row.document_date | date: 'dd/MM/yyyy'}}
-              </div>
-            </ng-template>
-          </ngx-datatable-column>
-
-          <ngx-datatable-column
-            [minWidth]="50"
-            [width]="100"
-            prop="document_date"
-            name="Document Date">
-            <ng-template let-row="row" ngx-datatable-cell-template>
-              <div style="text-align: left" class="text-truncate">
-                {{row.delivery_date | date: 'dd/MM/yyyy'}}
-              </div>
-            </ng-template>
-          </ngx-datatable-column>
-
-          <ngx-datatable-column
-            [width]="100"
-            [minWidth]="50"
-            prop="user"
-            name="User Request">
-            <ng-template let-row="row" ngx-datatable-cell-template>
-              <div style="text-align: left" class="text-truncate">
-                {{row.user_request}}
-              </div>
-            </ng-template>
-          </ngx-datatable-column>
-
-          <ngx-datatable-column
+            [minWidth]="100"
             [canAutoResize]="true"
-            prop="remark"
-            name="Remark">
+            prop="name"
+            name="Name">
             <ng-template let-row="row" ngx-datatable-cell-template>
-              <div style="text-align: left" class="text-truncate">
-                {{row.remark}}
+              <div fxLayout="column">
+                <div [ngClass]="{'twoline-title': row.name_eng}" style="text-align: left;padding-bottom: 0px;"
+                     class="text-truncate">
+                  {{row.name}}
+                </div>
+                <div *ngIf="row.name_eng" class="text-truncate"
+                     style="padding-top: 5px;text-align: left;line-height: 5px;font-size: 0.7rem;opacity: 0.8;">
+                  {{row.name_eng}}
+                </div>
               </div>
             </ng-template>
           </ngx-datatable-column>
 
           <ngx-datatable-column
             [width]="100"
-            [minWidth]="75"
-            prop="status"
+            [minWidth]="50"
+            prop="detail"
+            name="Description">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div style="text-align: left" class="text-truncate">
+                {{row.detail}}
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column
+            [width]="80"
+            prop="disable"
             name="Status">
             <ng-template let-row="row" ngx-datatable-cell-template>
-              <div style="text-align: center;">
-                <span *ngIf="row.status === 'pending'">Pending</span>
-                <span *ngIf="row.status === 'approved'" style="color: green">Approved</span>
-                <span *ngIf="row.status === 'canceled'" style="color: red">Canceled</span>
-                <button mat-icon-button class="" [matMenuTriggerFor]="menu">
-                  <mat-icon>arrow_drop_down</mat-icon>
-                </button>
-                <mat-menu #menu="matMenu">
-                  <a mat-menu-item  *ngIf="row.status === 'pending'"
-                     (click)="approveData(row)">
-                    <span l10nTranslate>Approve</span>
-                  </a>
-                  <a mat-menu-item  *ngIf="row.status === 'pending'"
-                     (click)="cancelData(row)">
-                    <span l10nTranslate>Cancel</span>
-                  </a>
-                  <a mat-menu-item  *ngIf="row.status !== 'pending'"
-                     (click)="retractData(row)">
-                    <span l10nTranslate>Retract</span>
-                  </a>
-                </mat-menu>
+              <div style="text-align: left" class="text-truncate">
+                <mat-chip-list>
+                  <mat-chip *ngIf="row.disable" class="status-inactive chip">Disable</mat-chip>
+                  <mat-chip *ngIf="!row.disable" class="status-active chip">Enable</mat-chip>
+                </mat-chip-list>
               </div>
             </ng-template>
           </ngx-datatable-column>
@@ -139,16 +115,23 @@
           <ngx-datatable-column
             [canAutoResize]="false"
             [resizeable]="false"
-            [width]="75">
+            [width]="90">
             <ng-template let-row="row" ngx-datatable-cell-template>
               <div style="text-align: center;" fxLayout="row">
-                <button mat-icon-button mat-tooltip="Edit" class="" (click)="editData(row)" *ngIf="row.status === 'pending'">
+                <button mat-icon-button mat-tooltip="Edit" class="" (click)="editData(row)">
                   <mat-icon>edit</mat-icon>
                 </button>
                 <button mat-icon-button class="" [matMenuTriggerFor]="menu">
                   <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
+                  <a *ngIf="!(row.disable)" mat-menu-item
+                     (click)="disableData(row)">
+                    <span l10nTranslate>Disable data</span>
+                  </a>
+                  <a *ngIf="(row.disable)" mat-menu-item (click)="enableData(row)">
+                    <span l10nTranslate>Enable data</span>
+                  </a>
                   <a mat-menu-item (click)="openLogs(row)">
                     <span l10nTranslate>View Logs</span>
                   </a>
@@ -182,5 +165,23 @@
 </div>
 
 <a mat-fab color="primary" tdMediaToggle="gt-xs" [mediaStyles]="{display: 'none'}" class="mat-fab-bottom-right fixed">
+  <!--[matMenuTriggerFor]="settingsMenu">-->
   <mat-icon>add</mat-icon>
 </a>
+<!--
+<mat-menu #settingsMenu="matMenu" [overlapTrigger]="false">
+  <td-menu style="width: 150px;">
+    <mat-nav-list dense>
+      <ng-template let-last="last" ngFor [ngForOf]="[0,1,2,3,4,5,6,7,8,9]">
+      <a mat-list-item>
+        <h4 mat-line><span class="text-wrap">By Item</span>
+        </h4>
+      </a>
+      <a mat-list-item>
+        <h4 mat-line><span class="text-wrap">By Project</span>
+        </h4>
+      </a>
+    </mat-nav-list>
+  </td-menu>
+</mat-menu>
+-->

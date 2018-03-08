@@ -141,9 +141,9 @@ export class ChangePriceComponent implements OnInit {
     });
   }
 
-  changeValue(_row) {
+  changeValue(_row, supplier_code) {
     _row.list_supplier.forEach((_s) => {
-      if (_row.supplier === _s.code) {
+      if (supplier_code === _s.code) {
         _row.supplier = _s.code;
         this.suppliers.forEach((supplier) => {
           if (_row.supplier === supplier.code) {

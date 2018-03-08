@@ -68,11 +68,15 @@ export class MainComponent implements OnInit, AfterViewInit {
     title: 'Report',
     route: '/main',
     icon: 'find_in_page',
+  }, /* {
+    title: 'Administrator',
+    route: '/main/administrator',
+    icon: 'people',
   }, {
     title: 'Summary',
     route: '/main/summary',
     icon: 'web',
-  },
+  },*/
   ];
 
   constructor(
@@ -256,9 +260,7 @@ export class MainComponent implements OnInit, AfterViewInit {
     });
   }
 
-  openSetting() {
-
-  }
+  openSetting() {}
 
   uploadProfile() {
     this.dialog.open(UploadImageComponent, {

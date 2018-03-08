@@ -11,6 +11,7 @@ import { PurchaseRequisitionService } from '../purchase-requisition/purchase-req
 import { PurchaseRequisition } from '../purchase-requisition/purchase-requisition';
 import { PurchaseRequisitionDialogComponent } from './purchase-requisition-dialog/purchase-requisition-dialog.component';
 import { Comparison } from '../comparison/comparison';
+import { PurchaseOrder } from '../purchase-order/purchase-order';
 
 @Component({
   selector: 'app-purchase-purchase-requisition',
@@ -32,6 +33,8 @@ export class PurchaseRequisitionComponent implements OnInit, AfterViewInit {
 
   rows: any[] = [];
   temp = [];
+  toDay = new Date();
+  order_data: PurchaseOrder = new PurchaseOrder({});
 
   constructor(private _purchaseRequisitionService: PurchaseRequisitionService,
               private _changeDetectorRef: ChangeDetectorRef,
@@ -143,6 +146,51 @@ export class PurchaseRequisitionComponent implements OnInit, AfterViewInit {
     });
   }
 
+  approveData(data: PurchaseRequisition) {
+    console.log(JSON.stringify(data));
+    data.status = 'approved';
+  }
+
+  cancelData(data: PurchaseRequisition) {
+    data.status = 'canceled';
+  }
+
+  retractData(data: PurchaseRequisition) {
+    data.status = 'pending';
+  }
+/*
+  generateCode() {
+    // this._loadingService.register('data.form');
+    const _year = '-' + this.toDay.getFullYear();
+    let _month = '-' + (this.toDay.getMonth() + 1);
+    if (this.toDay.getMonth() < 10) {
+      _month = '-0' + (this.toDay.getMonth() + 1);
+    }
+
+    const prefix = 'PO' + _year + _month;
+
+    this.data.code = prefix + '-001';
+    this._purchaseOrderService.requestLastData(prefix).subscribe((s) => {
+      s.forEach((ss: PurchaseOrder) => {
+        console.log('Prev Code :' + ss.code);
+        // tslint:disable-next-line:radix
+        const str = parseInt(ss.code.substring(ss.code.length - 3, ss.code.length)) + 1;
+        let last = '' + str;
+
+        if (str < 100) {
+          last = '0' + str;
+        }
+
+        if (str < 10) {
+          last = '00' + str;
+        }
+
+        this.data.code = prefix + '-' + last;
+      });
+      // this._loadingService.resolve('data.form');
+    });
+  }
+*/
   enableData(data: PurchaseRequisition) {
     this.dialog.open(ConfirmComponent, {
       data: {

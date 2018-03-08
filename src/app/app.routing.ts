@@ -19,6 +19,9 @@ import {HomePurchaseComponent} from './main/purchase/home-purchase/home-purchase
 import {InventoryComponent} from './main/inventory/inventory.component';
 import {HomeInventoryComponent} from './main/inventory/home-inventory/home-inventory.component';
 
+// Administrator
+import {AdministratorComponent} from './main/administrator/administrator.component';
+
 export {RequireAuthGuard} from './login/guards/require-auth.guard';
 
 const appRoutes: Routes = [
@@ -67,7 +70,20 @@ const appRoutes: Routes = [
                     path: '',
                     children: [
                       {path: '', component: HomeInventoryComponent, pathMatch: 'full'},
-                      // {path: 'stock-adjustment', loadChildren: 'app/main/inventory/stock-adjustment.module#StockAdjustmentModule'},
+                      // {path: 'stock-adjustment', loadChildren: 'app/main/inventory/stock-adjustment/stock-adjustment.module#StockAdjustmentModule'},
+                    ]
+                  }
+                ]
+              },
+              {
+                path: 'administrator',
+                component: AdministratorComponent,
+                children: [
+                  {
+                    path: '',
+                    children: [
+                      {path: 'user', loadChildren: 'app/main/administrator/user/user.module#UserModule'},
+                      {path: 'role', loadChildren: 'app/main/administrator/role/role.module#RoleModule'},
                     ]
                   }
                 ]
@@ -105,5 +121,5 @@ export const routedComponents: any[] = [
   HomePurchaseComponent,
   InventoryComponent,
   HomeInventoryComponent,
-  // AdminComponent
+  AdministratorComponent
 ];

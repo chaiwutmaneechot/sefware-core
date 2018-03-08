@@ -35,6 +35,7 @@ export class CompareByItemComponent implements OnInit {
   data: Comparison = new Comparison({});
   loading: boolean = true;
   error: any;
+  title: string = 'Comparison';
 
   images = [];
   rows: any[] = [];
@@ -65,10 +66,12 @@ export class CompareByItemComponent implements OnInit {
               public dialogRef: MatDialogRef<CompareByItemComponent>) {
     try {
       if (md_data) {
+        this.title = 'Edit ' + this.title;
         this.data = new Comparison(md_data);
         this.getItemGroupData(this.data.type);
         this.getItemSubGroupData(this.data.group);
       } else {
+        this.title = 'New ' + this.title;
         this._comparisonService.requestData().subscribe(() => {
           this.generateCode();
         });

@@ -8,7 +8,6 @@ import { GoodsReceive } from './goods-receive';
 @Injectable()
 export class GoodsReceiveService {
 
-
   lists: FirebaseListObservable<any>;
   rows: GoodsReceive [] = [];
   _path: string = '/main/purchase/goods_receive';

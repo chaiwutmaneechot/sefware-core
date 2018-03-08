@@ -13,6 +13,7 @@ import { PurchaseOrderDialogComponent } from './purchase-order-dialog/purchase-o
 import { Comparison } from '../comparison/comparison';
 import { SupplierService } from '../../../setup/supplier/supplier.service';
 import { Supplier } from '../../../setup/supplier/supplier';
+import { PurchaseRequisition } from '../purchase-requisition/purchase-requisition';
 
 @Component({
   selector: 'app-purchase-purchase-order',
@@ -163,6 +164,18 @@ export class PurchaseOrderComponent implements OnInit, AfterViewInit {
         });
       }
     });
+  }
+
+  approveData(data: PurchaseRequisition) {
+    data.status = 'approved';
+  }
+
+  cancelData(data: PurchaseRequisition) {
+    data.status = 'canceled';
+  }
+
+  retractData(data: PurchaseRequisition) {
+    data.status = 'pending';
   }
 
   enableData(data: PurchaseOrder) {

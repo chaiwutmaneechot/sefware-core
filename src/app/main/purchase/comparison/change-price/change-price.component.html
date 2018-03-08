@@ -61,8 +61,6 @@
 
 
         <ngx-datatable-column
-          [width]="200"
-          [minWidth]="100"
           [canAutoResize]="true"
           prop="name"
           name="Description">
@@ -83,7 +81,6 @@
         <ngx-datatable-column
           [width]="100"
           [minWidth]="50"
-          [canAutoResize]="true"
           prop="price"
           name="Price">
           <ng-template let-row="row" ngx-datatable-cell-template>
@@ -96,7 +93,6 @@
         <ngx-datatable-column
           [width]="150"
           [minWidth]="75"
-          [canAutoResize]="true"
           prop="unit"
           name="Unit">
           <ng-template let-row="row" ngx-datatable-cell-template>
@@ -109,17 +105,21 @@
         <ngx-datatable-column
           [width]="200"
           [minWidth]="100"
-          [canAutoResize]="true"
           prop="supplier"
           name="Supplier">
           <ng-template let-row="row" ngx-datatable-cell-template>
-            <mat-form-field style="max-width: 75%;">
-              <mat-select #unitControl="ngModel"
-                          [ngModelOptions]="{standalone: true}"
-                          [(ngModel)]="row.supplier" (change)="changeValue(row)">
-                <mat-option *ngFor="let supplier of row.list_supplier" [value]="supplier.code">{{supplier.code}} : {{supplier.name1}}</mat-option>
-              </mat-select>
-            </mat-form-field>
+            <div style="text-align: center;">
+              <span>{{row.supplier}} : {{row.supplier_name1}}</span>
+              <button mat-icon-button class="" [matMenuTriggerFor]="menu">
+                <mat-icon>arrow_drop_down</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <a mat-menu-item *ngFor="let supplier of row.list_supplier"
+                   (click)="changeValue(row, supplier.code)">
+                  <span l10nTranslate>{{supplier.name1}} : {{supplier.price}}</span>
+                </a>
+              </mat-menu>
+            </div>
           </ng-template>
         </ngx-datatable-column>
       </ngx-datatable>

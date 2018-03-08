@@ -16,6 +16,8 @@ import { ItemSubGroupService } from '../../../../setup/item-sub-group/item-sub-g
 import { ItemSubGroup } from '../../../../setup/item-sub-group/item-sub-group';
 import { PurchaseRequisitionService } from '../../purchase-requisition/purchase-requisition.service';
 import { PurchaseRequisition, PurchaseRequisitionItem } from '../../purchase-requisition/purchase-requisition';
+import { AuthService } from '../../../../login/auth.service';
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'app-purchase-requisition-dialog',
@@ -28,6 +30,8 @@ export class PurchaseRequisitionDialogComponent implements OnInit {
   data: PurchaseRequisition = new PurchaseRequisition({});
   loading: boolean = true;
   error: any;
+  title: string = 'Purchase Requisition';
+  user: firebase.User;
 
   images = [];
   rows: any[] = [];
@@ -52,16 +56,23 @@ export class PurchaseRequisitionDialogComponent implements OnInit {
               private _itemgroupService: ItemGroupService,
               private _itemsubgroupService: ItemSubGroupService,
               private _uomService: UomService,
+              private _authService: AuthService,
               private _loadingService: TdLoadingService,
               public snackBar: MatSnackBar,
               private dialog: MatDialog,
               public dialogRef: MatDialogRef<PurchaseRequisitionDialogComponent>) {
     try {
+      this._authService.user.subscribe((user) => {
+        this.user = user;
+      });
+
       if (md_data) {
+        this.title = 'Edit ' + this.title;
         this.data = new PurchaseRequisition(md_data);
         this.getItemGroupData(this.data.type);
         this.getItemSubGroupData(this.data.group);
       } else {
+        this.title = 'New ' + this.title;
         this._purchaseRequisitionService.requestData().subscribe(() => {
           this.generateCode();
         });
@@ -77,6 +88,7 @@ export class PurchaseRequisitionDialogComponent implements OnInit {
   ngOnInit(): void {
     this.getItemTypeData();
     this.getUnitData();
+    this.data.user_request = this.user.email;
   }
 
   setPage(pageInfo) {

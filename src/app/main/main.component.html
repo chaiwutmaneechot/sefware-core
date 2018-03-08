@@ -9,6 +9,9 @@
       </ng-template>
     </mat-nav-list>
     <mat-nav-list td-navigation-drawer-menu>
+      <a mat-list-item [routerLink]="'/main/administrator/user'" (click)="layout.close()">
+        <mat-icon>people</mat-icon>
+        Administrator</a>
       <a mat-list-item (click)="openSetting()">
         <mat-icon>tune</mat-icon>
         Account settings</a>

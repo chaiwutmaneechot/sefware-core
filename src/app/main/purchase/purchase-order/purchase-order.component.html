@@ -23,7 +23,7 @@
         <!--</button>-->
         <!--</mat-menu>-->
       <a mat-raised-button tdMediaToggle="xs" [mediaStyles]="{display: 'none'}" color="primary" (click)="addData()">
-        <mat-icon>add</mat-icon> Add Purchase Order</a>
+        <mat-icon>add</mat-icon> New Purchase Order</a>
     </span>
 
     </div>
@@ -57,8 +57,7 @@
           <ngx-datatable-column
             prop="code"
             name="Document No"
-            [minWidth]="75"
-            [canAutoResize]="true">
+            [minWidth]="75">
             <ng-template let-row="row" ngx-datatable-cell-template>
               <div style="text-align: left" class="text-truncate">
                 {{row.code}}
@@ -69,7 +68,6 @@
 
           <ngx-datatable-column
             [minWidth]="75"
-            [canAutoResize]="true"
             prop="document_date"
             name="Document Date">
             <ng-template let-row="row" ngx-datatable-cell-template>
@@ -81,7 +79,6 @@
 
           <ngx-datatable-column
             [minWidth]="75"
-            [canAutoResize]="true"
             prop="document_date"
             name="Document Date">
             <ng-template let-row="row" ngx-datatable-cell-template>
@@ -111,8 +108,7 @@
           </ngx-datatable-column>
 
           <ngx-datatable-column
-            [width]="200"
-            [minWidth]="100"
+            [canAutoResize]="true"
             prop="remark"
             name="Remark">
             <ng-template let-row="row" ngx-datatable-cell-template>
@@ -123,15 +119,32 @@
           </ngx-datatable-column>
 
           <ngx-datatable-column
-            [width]="80"
-            prop="disable"
+            [width]="100"
+            [minWidth]="75"
+            prop="status"
             name="Status">
             <ng-template let-row="row" ngx-datatable-cell-template>
-              <div style="text-align: left" class="text-truncate">
-                <mat-chip-list>
-                  <mat-chip *ngIf="row.disable" class="status-inactive chip">Disable</mat-chip>
-                  <mat-chip *ngIf="!row.disable" class="status-active chip">Enable</mat-chip>
-                </mat-chip-list>
+              <div style="text-align: center;">
+                <span *ngIf="row.status === 'pending'">Pending</span>
+                <span *ngIf="row.status === 'approved'" style="color: green">Approved</span>
+                <span *ngIf="row.status === 'canceled'" style="color: red">Canceled</span>
+                <button mat-icon-button class="" [matMenuTriggerFor]="menu">
+                  <mat-icon>arrow_drop_down</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <a mat-menu-item  *ngIf="row.status === 'pending'"
+                     (click)="approveData(row)">
+                    <span l10nTranslate>Approve</span>
+                  </a>
+                  <a mat-menu-item  *ngIf="row.status === 'pending'"
+                     (click)="cancelData(row)">
+                    <span l10nTranslate>Cancel</span>
+                  </a>
+                  <a mat-menu-item  *ngIf="row.status !== 'pending'"
+                     (click)="retractData(row)">
+                    <span l10nTranslate>Retract</span>
+                  </a>
+                </mat-menu>
               </div>
             </ng-template>
           </ngx-datatable-column>
@@ -139,7 +152,7 @@
           <ngx-datatable-column
             [canAutoResize]="false"
             [resizeable]="false"
-            [width]="90">
+            [width]="75">
             <ng-template let-row="row" ngx-datatable-cell-template>
               <div style="text-align: center;" fxLayout="row">
                 <button mat-icon-button mat-tooltip="Edit" class="" (click)="editData(row)">
@@ -149,13 +162,6 @@
                   <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                  <a *ngIf="!(row.disable)" mat-menu-item
-                     (click)="disableData(row)">
-                    <span l10nTranslate>Disable data</span>
-                  </a>
-                  <a *ngIf="(row.disable)" mat-menu-item (click)="enableData(row)">
-                    <span l10nTranslate>Enable data</span>
-                  </a>
                   <a mat-menu-item (click)="openLogs(row)">
                     <span l10nTranslate>View Logs</span>
                   </a>

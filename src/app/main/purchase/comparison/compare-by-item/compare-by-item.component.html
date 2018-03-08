@@ -1,4 +1,4 @@
-<td-layout-nav toolbarTitle="Add Item" class="container">
+<td-layout-nav toolbarTitle="{{title}}" class="container">
   <button mat-icon-button td-menu-button mat-dialog-close>
     <mat-icon>arrow_back</mat-icon>
   </button>
@@ -146,7 +146,7 @@
         [limit]="page.size"
       >
 
-        <ngx-datatable-column [sortable]="false" name="No." width="100">
+        <ngx-datatable-column [sortable]="false" name="No." width="50">
           <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
             <div style="text-align: left" class="text-truncate">
               {{rowIndex+1}}.
@@ -157,8 +157,7 @@
         <ngx-datatable-column
           prop="code"
           name="Code"
-          [minWidth]="75"
-          [width]="150">
+          [width]="100">
           <ng-template let-row="row" ngx-datatable-cell-template>
             <div style="text-align: left" class="text-truncate">
               {{row.code}}
@@ -168,11 +167,9 @@
 
 
         <ngx-datatable-column
-          [width]="200"
-          [minWidth]="100"
-          [canAutoResize]="true"
           prop="name"
-          name="Description">
+          name="Description"
+          [width]="200">
           <ng-template let-row="row" ngx-datatable-cell-template>
             <div fxLayout="column">
               <div [ngClass]="{'twoline-title': row.name1}" style="text-align: left;padding-bottom: 0px;"
@@ -189,8 +186,6 @@
 
         <ngx-datatable-column
           [width]="150"
-          [minWidth]="75"
-          [canAutoResize]="true"
           prop="unit"
           name="Unit">
           <ng-template let-row="row" ngx-datatable-cell-template>
@@ -206,9 +201,7 @@
         </ngx-datatable-column>
 
         <ngx-datatable-column
-          [width]="150"
-          [minWidth]="75"
-          [canAutoResize]="true"
+          [width]="100"
           prop="price"
           name="Price">
           <ng-template let-row="row" ngx-datatable-cell-template>
@@ -228,9 +221,9 @@
         <ngx-datatable-column
           [canAutoResize]="false"
           [resizeable]="false"
-          [width]="90">
+          [width]="100">
           <ng-template let-row="row" ngx-datatable-cell-template>
-            <div style="text-align: center;" fxLayout="row">
+            <div style="align-items: center;" fxLayout="row">
               <button mat-icon-button mat-tooltip="Delete" color="warn" class="" (click)="deleteItemData(row)">
                 <mat-icon>delete_forever</mat-icon>
               </button>

@@ -1,0 +1,34 @@
+<td-layout-manage-list #manageList
+                       [opened]="media.registerQuery('gt-sm') | async"
+                       [mode]="(media.registerQuery('gt-sm') | async) ? 'side' : 'push'"
+                       [sidenavWidth]="(media.registerQuery('gt-xs') | async) ? '257px' : '100%'">
+
+  <mat-toolbar td-sidenav-content><span>
+    <mat-icon mat-list-icon>people</mat-icon> {{'Administrator' | translate:lang}}</span></mat-toolbar>
+
+  <mat-nav-list td-sidenav-content (click)="!media.query('gt-sm') && manageList.close()">
+    <a mat-list-item
+       mat-ripple class="block relative"
+       (click)="!media.query('gt-sm') && manageList.close()"
+       [routerLinkActive]="['']"
+       [ngClass]="{'active': router.routerState.snapshot.url === '/main/administrator/user'}"
+       [routerLinkActiveOptions]="{exact:true}"
+       [routerLink]="['/main/administrator/user']"
+    >
+      <!--<mat-icon mat-list-icon>shopping_cart</mat-icon>-->User
+    </a>
+
+    <a mat-list-item
+       mat-ripple class="block relative"
+       (click)="!media.query('gt-sm') && manageList.close()"
+       [routerLinkActive]="['']"
+       [ngClass]="{'active': router.routerState.snapshot.url === '/main/administrator/role'}"
+       [routerLinkActiveOptions]="{exact:true}"
+       [routerLink]="['/main/administrator/role']"
+    >
+      <!--<mat-icon mat-list-icon>shopping_cart</mat-icon>-->Role
+    </a>
+  </mat-nav-list>
+  <router-outlet></router-outlet>
+
+</td-layout-manage-list>

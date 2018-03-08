@@ -1,0 +1,66 @@
+.form {
+  width: 450px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.right-action{
+  float: right;
+}
+
+.btn-colored{
+  color: #fff;
+  background: var(--default-primary-color);
+}
+
+.btn-cancel{
+  margin-right: 10px;
+}
+
+.btn{
+  text-transform: uppercase;
+}
+
+.mask{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.1);
+  right: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.top-progress{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 101;
+}
+
+.area-warning{
+  background-color: #fbe9e7;
+  color: #d50000;
+  flex-wrap: wrap;
+  margin: 0 0 24px 0;
+  flex-direction: row;
+  position: relative;
+  padding: 12px;
+  line-height: 20px;
+  font-size: 14px;
+}
+
+/deep/ .cdk-overlay-pane {
+  position: absolute !important;
+}
+
+.btn-close{
+  position: absolute;
+  font-size: 1.3rem;
+  line-height: 40px;
+  top:18px;
+  line-height: 12px;
+  right: 25px;
+}

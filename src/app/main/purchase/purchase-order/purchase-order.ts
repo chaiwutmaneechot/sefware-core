@@ -10,9 +10,14 @@ export class PurchaseOrder {
   supplier_name1?: string | null | undefined;
   supplier_name2?: string | null | undefined;
   remark?: string | null | undefined;
-  status?: string | null | undefined;
+  status?: string = 'pending';
   vat_type?: string | null | undefined;
   disable?: boolean = false;
+  vat_total?: number = 0;
+  discount_total?: number = 0;
+  sub_total?: number = 0;
+  net_total?: number = 0;
+  grand_total?: number = 0;
   item?: PurchaseOrderItem[] = [];
 
   constructor(params: PurchaseOrder) {

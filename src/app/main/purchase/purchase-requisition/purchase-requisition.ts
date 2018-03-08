@@ -8,7 +8,7 @@ export class PurchaseRequisition {
   subgroup?: string = '';
   user_request?: string | null | undefined;
   remark?: string | null | undefined;
-  status?: string | null | undefined;
+  status?: string = 'pending';
   disable?: boolean = false;
   item?: PurchaseRequisitionItem[] = [];
 

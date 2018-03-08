@@ -42,7 +42,6 @@ export class PurchaseOrderService {
     return this.lists.remove(data.code);
   }
 
-
   requestLastData(prefix: string) {
     return this.agFb.list(this._path, {
       query: {

@@ -3,7 +3,7 @@ import {AngularFireDatabase, FirebaseListObservable} from 'angularfire2/database
 import {Page} from '../../../shared/model/page';
 import {Observable} from 'rxjs';
 import {PagedData} from '../../../shared/model/paged-data';
-import { Comparison } from './comparison';
+import {Comparison} from './comparison';
 
 @Injectable()
 export class ComparisonService {

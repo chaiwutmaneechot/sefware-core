@@ -10,13 +10,13 @@
       <span flex>{{'Comparison' | translate:lang}}</span>
       <span flex></span>
 
-      <mat-form-field style="width: 150px" flex>
-        <mat-select placeholder="Compare By" class="push-bottom-none" disabled>
+      <!--<mat-form-field style="width: 150px" flex>
+        <mat-select placeholder="Compare By" class="push-bottom-none" readonly>
           <mat-option *ngFor="let compare_by of compare_bys" [value]="compare_by.value">
             {{ compare_by.viewValue }}
           </mat-option>
         </mat-select>
-      </mat-form-field>
+      </mat-form-field>-->
 
       <mat-form-field style="width: 200px" flex>
         <input matInput
@@ -70,7 +70,7 @@
         <a mat-raised-button tdMediaToggle="xs" [mediaStyles]="{display: 'none'}" color="primary" (click)="addData()">
           <mat-icon>add</mat-icon> By Project</a>-->
         <a mat-raised-button tdMediaToggle="xs" [mediaStyles]="{display: 'none'}" color="primary" (click)="addData()">
-          <mat-icon>add</mat-icon> Add Comparison By Item</a>
+          <mat-icon>add</mat-icon> New Comparison</a>
     </span>
 
     </div>
@@ -115,7 +115,6 @@
 
 
           <ngx-datatable-column
-            [minWidth]="100"
             [canAutoResize]="true"
             prop="name"
             name="Description">

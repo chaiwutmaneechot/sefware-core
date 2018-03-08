@@ -1,4 +1,4 @@
-<td-layout-nav toolbarTitle="Add Item" class="container">
+<td-layout-nav toolbarTitle="{{title}}" class="container">
   <button mat-icon-button td-menu-button mat-dialog-close>
     <mat-icon>arrow_back</mat-icon>
   </button>
@@ -28,7 +28,7 @@
     <mat-divider></mat-divider>
 
     <div layout="row" layout-align="start center">
-      <mat-card-content class="push-buttom-none" style="width: 25vw;margin: 10px; background-color: #e0e0e0;">
+      <mat-card-content class="push-buttom-none" style="width: 25vw;margin: 10px; background-color: #f5f5f5;">
         <div layout="row">
           <mat-form-field style="padding: 0px 10px;" flex>
             <input matInput
@@ -134,7 +134,7 @@
         [limit]="page.size"
       >
 
-        <ngx-datatable-column [sortable]="false" name="No." width="100">
+        <ngx-datatable-column [sortable]="false" name="No." width="50">
           <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
             <div style="text-align: left" class="text-truncate">
               {{rowIndex+1}}.
@@ -156,8 +156,6 @@
 
 
         <ngx-datatable-column
-          [width]="200"
-          [minWidth]="100"
           [canAutoResize]="true"
           prop="name"
           name="Description">
@@ -178,7 +176,6 @@
         <ngx-datatable-column
           [width]="150"
           [minWidth]="75"
-          [canAutoResize]="true"
           prop="quantity"
           name="Quantity">
           <ng-template let-row="row" ngx-datatable-cell-template>
@@ -198,7 +195,6 @@
         <ngx-datatable-column
           [width]="150"
           [minWidth]="75"
-          [canAutoResize]="true"
           prop="unit"
           name="Unit">
           <ng-template let-row="row" ngx-datatable-cell-template>

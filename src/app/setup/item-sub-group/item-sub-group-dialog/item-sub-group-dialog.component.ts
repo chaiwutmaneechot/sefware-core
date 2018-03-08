@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import {GalleryConfig, /*GalleryService*/} from 'ng-gallery';
 import {Language} from 'angular-l10n';
 import {TdLoadingService} from '@covalent/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';

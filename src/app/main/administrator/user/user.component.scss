@@ -131,9 +131,9 @@
   }
 
   .mat-paginator {
-    background-color: #f5f5f5;
-    border-top: 1px solid rgba(0, 0, 0, .08);
-    color: rgba(0, 0, 0, 0.54);
+    //background-color: #f5f5f5;
+    //border-top: 1px solid rgba(0, 0, 0, .08);
+    //color: rgba(0, 0, 0, 0.54);
     font-size: 12px;
     height: 56px;
     //padding-left: 24px;
@@ -148,6 +148,7 @@
     color: rgba(0, 0, 0, 0.38);
     display: block;
     font-size: 14px;
+    width: 10px;
   }
 
   .mat-select-underline {
@@ -192,4 +193,15 @@
     color:rgba(0, 0, 0, 0.9)
   }
 
+  .btn-blue{
+    background-color: #1565C0 !important;
+    color: #fff;
+  }
+
+  .mat-form-field {
+    color: rgba(0, 0, 0, 0.9);
+    display: block;
+    font-size: 14px;
+    padding: 0px 10px;
+  }
 }

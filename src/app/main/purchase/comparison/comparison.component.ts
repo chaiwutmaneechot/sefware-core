@@ -168,7 +168,7 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
     const _period_from = new Date(this.period_from);
     const _period_to = new Date(this.period_to);
 
-    // set time to 00:00:00
+    /*// set time to 00:00:00
     _period_from.setHours(0);
     _period_from.setMinutes(0);
     _period_from.setSeconds(0);
@@ -176,12 +176,18 @@ export class ComparisonComponent implements OnInit, AfterViewInit {
     // set time to 23:59:59
     _period_to.setHours(23);
     _period_to.setMinutes(59);
-    _period_to.setSeconds(59);
+    _period_to.setSeconds(59);*/
 
     // filter our data
     const temp = this.temp.filter(function(d) {
-      return (d.period_from >= _period_from.getTime()) &&
-        (d.period_to <= _period_to.getTime());
+      const prf = new Date(d.period_from);
+      const prt = new Date(d.period_to);
+      return ((((_period_from.getFullYear() <= prf.getFullYear()) && (_period_from.getMonth() <= prf.getMonth())) &&
+        ((_period_to.getFullYear() >= prt.getFullYear()) && (_period_to.getMonth() >= prt.getMonth()))) ||
+        (((_period_from.getFullYear() === prf.getFullYear()) && (_period_from.getMonth() === prf.getMonth())) ||
+         ((_period_from.getFullYear() === prf.getFullYear()) && (_period_from.getMonth() === prt.getMonth())) ||
+         ((_period_to.getFullYear() === prf.getFullYear()) && (_period_to.getMonth() === prf.getMonth())) ||
+         ((_period_to.getFullYear() === prt.getFullYear()) && (_period_to.getMonth() === prt.getMonth()))));
     });
 
     // update the rows

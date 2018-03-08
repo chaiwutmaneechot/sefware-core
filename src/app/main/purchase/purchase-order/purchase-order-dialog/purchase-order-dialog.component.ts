@@ -30,6 +30,7 @@ export class PurchaseOrderDialogComponent implements OnInit {
   data: PurchaseOrder = new PurchaseOrder({});
   loading: boolean = true;
   error: any;
+  title: string = 'Purchase Order';
 
   images = [];
   rows: any[] = [];
@@ -67,10 +68,12 @@ export class PurchaseOrderDialogComponent implements OnInit {
               public dialogRef: MatDialogRef<PurchaseOrderDialogComponent>) {
     try {
       if (md_data) {
+        this.title = 'Edit ' + this.title;
         this.data = new PurchaseOrder(md_data);
         this.getItemGroupData(this.data.type);
         this.getItemSubGroupData(this.data.group);
       } else {
+        this.title = 'New ' + this.title;
         this._purchaseOrderService.requestData().subscribe(() => {
           this.generateCode();
         });
@@ -194,6 +197,7 @@ export class PurchaseOrderDialogComponent implements OnInit {
 
   deleteItemData(row) {
     this.data.item = this.data.item.filter((item) => item !== row);
+    this.sumaryTotal();
   }
 
   getItemTypeData() {
@@ -273,12 +277,10 @@ export class PurchaseOrderDialogComponent implements OnInit {
         data.subgroup = '';
       }
     }
-    console.log('Item Code :' + item_code);
 
     this._itemWithComparisonService.requestItemData(item_code).subscribe((snapshot) => {
       this._itemWithComparisonService.rows = [];
       snapshot.forEach((s) => {
-        console.log('Itemss Data :' + JSON.stringify(s));
         const _row = new PurchaseOrderItem(s);
         this.uoms.forEach((uom) => {
           if (_row.primary_unit === uom.code) {
@@ -291,11 +293,44 @@ export class PurchaseOrderDialogComponent implements OnInit {
         this.data.item.push(_row);
       });
     });
+    this.sumaryTotal();
     this._loadingService.resolve();
   }
 
   calAmount(row) {
     row.amount = (row.quantity * row.price) - row.discount;
+    this.sumaryTotal();
+  }
+
+  sumaryTotal() {
+    this.data.discount_total = 0;
+    this.data.grand_total = 0;
+    this.data.sub_total = 0;
+    this.data.net_total = 0;
+    this.data.vat_total = 0;
+    this.data.item.forEach((sum) => {
+      this.data.discount_total += sum.discount;
+      this.data.net_total += sum.amount;
+      this.data.sub_total = this.data.net_total + this.data.discount_total;
+    });
+    switch (this.data.vat_type) {
+      case 'none_vat':
+        this.data.vat_total = (this.data.net_total * 0) / 100;
+        this.data.grand_total = this.data.net_total + this.data.vat_total;
+        break;
+      case 'vat_inclusive':
+        this.data.vat_total = (this.data.net_total * 7) / 107;
+        this.data.grand_total = this.data.net_total - this.data.vat_total;
+        break;
+      case 'vat_exclusive':
+        this.data.vat_total = (this.data.net_total * 7) / 100;
+        this.data.grand_total = this.data.net_total + this.data.vat_total;
+        break;
+      default:
+        this.data.vat_total = 0;
+        this.data.grand_total = this.data.net_total + this.data.vat_total;
+        break;
+    }
   }
 
   openLink(link: string) {

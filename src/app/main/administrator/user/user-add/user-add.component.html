@@ -1,0 +1,77 @@
+<div *ngIf="processing" class="mask"></div>
+<mat-progress-bar *ngIf="processing" class="top-progress" mode="indeterminate"></mat-progress-bar>
+
+<form class="form" #form="ngForm" (ngSubmit)="saveUser(form)">
+  <h2 *ngIf="!md_data" mat-dialog-title l10nTranslate>Add new account</h2>
+  <h2 *ngIf="md_data" mat-dialog-title l10nTranslate>Edit account</h2>
+  <mat-error *ngIf="error" class="area-warning">
+    {{ error }}
+  </mat-error>
+
+  <button mat-icon-button mat-dialog-close class="btn-close">
+    <mat-icon>
+      <i class="mdi mdi-close"></i>
+    </mat-icon>
+  </button>
+
+  <mat-dialog-content>
+    <div fxLayout="column">
+      <div>
+
+      </div>
+      <div>
+        <mat-input-container class="full-width">
+          <input matInput
+                 placeholder="{{'Email' | translate:lang}}"
+                 required
+                 type="email"
+                 name="email"
+                 [(ngModel)]="data.email"
+                 #email="ngModel"
+          >
+          <mat-error *ngIf="email.errors">
+            <div l10nTranslate="" [hidden]="!email.errors.required">
+              Email is required
+            </div>
+          </mat-error>
+        </mat-input-container>
+      </div>
+      <div *ngIf="!md_data">
+        <mat-input-container class="full-width">
+          <input matInput
+                 placeholder="{{'Password' | translate:lang}}"
+                 name="password"
+                 [(ngModel)]="form.value.password"
+                 #password="ngModel"
+                 minlength="6"
+                 required
+          >
+          <mat-error *ngIf="password.errors">
+            <div l10nTranslate [hidden]="!password.errors.required">
+              Password is required
+            </div>
+            <div l10nTranslate [hidden]="!password.errors.minlength">
+              Password must be at least 6 characters long
+            </div>
+          </mat-error>
+        </mat-input-container>
+      </div>
+      <div>
+        <mat-input-container class="full-width">
+          <input matInput
+                 placeholder="{{'Display Name' | translate:lang}}"
+                 name="displayName"
+                 [(ngModel)]="data.displayName"
+                 #displayName="ngModel"
+          >
+        </mat-input-container>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions class="right-action">
+    <button class="btn btn-cancel" mat-button mat-dialog-close>{{'Cancel' | translate:lang}}</button>
+    <button class="btn btn-colored" type="submit" mat-raised-button>{{'Save' | translate:lang}}</button>
+  </mat-dialog-actions>
+</form>
+
+
